@@ -23,11 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsAdapter;
 import com.example.appnuevo.apis.ApiClient;
+import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +74,10 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
                             productsAdapter.limpiarProducts();
                             ProductResponse productResponse = response.body();
                             ArrayList<Product> products = productResponse.getData();
-                            //Log.e(TAG, "DATA : "+products.toString());}
+
+                            Gson gson = new Gson();
+                            String datosPaser = gson.toJson(response.body());
+                            Log.e(TAG, "DATOS GENERALES: "+ datosPaser);
                             productsAdapter.adicionarListaProducts(products);
                         } else {
                             Log.e(TAG, "NO SE PUDO CONECTAR : " + response.errorBody());
@@ -79,6 +88,7 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
                         Log.e(TAG, "ONFAILURE SALES : " + t.toString());
                     }
                 });
+
             }
 
             @Override

@@ -4,6 +4,7 @@ import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,4 +22,7 @@ public interface Services {
 
     @POST("producto/busqueda")
     Call<ProductResponse> searchProductMatch(@Query("texto") String texto, @Query("page") int page);
+
+    @POST("producto/busqueda")
+    Call<ResponseBody> search(@Query("texto") String texto);
 }

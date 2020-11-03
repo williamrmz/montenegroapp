@@ -7,10 +7,7 @@ public class ProductResponse {
     private ArrayList<Product> data;
     private boolean status;
 
-    public ArrayList<Product> getData() {
-
-        return data;
-    }
+    public ArrayList<Product> getData() { return data; }
 
     public void setData(ArrayList<Product> data) {
         this.data = data;

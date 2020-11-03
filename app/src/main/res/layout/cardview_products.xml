@@ -48,21 +48,13 @@
 
                 <TextView
                     android:id="@+id/tvCategorySearch"
-                    android:layout_width="264dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="CATEGORÍA BUSCADA"
                     android:textColor="#2196F3"
                     android:textSize="13dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvCodeSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="ID PRODUCTO"
-                    android:textColor="#54E62B"
-                    android:textSize="11dp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,19 +62,11 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvPurchaseSearch"
-                    android:layout_width="185dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:paddingRight="5dp"
-                    android:text="TOTAL"
-                    android:textColor="#E64141"
-                    android:textSize="18sp" />
+
 
                 <TextView
                     android:id="@+id/tvSalesPurchase"
-                    android:layout_width="185dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:paddingRight="5dp"

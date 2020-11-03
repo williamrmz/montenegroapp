@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
+import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
+import com.example.appnuevo.models.ProductResponse;
 
 import java.util.ArrayList;
 
@@ -36,10 +39,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productsList.get(position);
         holder.nombre.setText(product.getNombre());
-        holder.preciocompra.setText(product.getPrecio_compra());
-        holder.precioventa.setText(product.getPrecio_venta());
-        holder.categoria.setText(product.getNombre_categoria());
-        holder.idproducto.setText(product.getCodigo());
+        holder.categoria.setText(product.getCategoria());
     }
 
     @Override
@@ -58,14 +58,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nombre, categoria, preciocompra, precioventa, idproducto;
+        TextView nombre, categoria;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.tvNameSearch);
             categoria = itemView.findViewById(R.id.tvCategorySearch);
-            preciocompra = itemView.findViewById(R.id.tvPurchaseSearch);
-            precioventa = itemView.findViewById(R.id.tvSalesPurchase);
-            idproducto = itemView.findViewById(R.id.tvCodeSearch);
         }
     }
 }

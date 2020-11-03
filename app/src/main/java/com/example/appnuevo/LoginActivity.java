@@ -14,9 +14,15 @@ import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.Usuario;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +56,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
-                    LoginResponse loginResponse = response.body();
+                   /* Gson gson = new Gson();
+                    String loginResponse = gson.toJson(response.body());
+                    Log.e(TAG, "PRECIOS: "+ loginResponse);*/
+
+                   LoginResponse loginResponse = response.body();
                     ArrayList<Usuario> coleccion = loginResponse.getData();
                     boolean estado = loginResponse.isStatus();
                     if (estado){
@@ -59,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(LoginActivity.this,"Datos incorrectos", Toast.LENGTH_LONG).show();
                     }
+
                 }else{
                     Toast.makeText(LoginActivity.this,"Hubo un problema : " + response.errorBody(), Toast.LENGTH_LONG).show();
                 }
