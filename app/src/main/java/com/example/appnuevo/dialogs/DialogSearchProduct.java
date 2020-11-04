@@ -73,12 +73,26 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
                         if(response.isSuccessful()){
                             productsAdapter.limpiarProducts();
                             ProductResponse productResponse = response.body();
-                            ArrayList<Product> products = productResponse.getData();
 
-                            Gson gson = new Gson();
-                            String datosPaser = gson.toJson(response.body());
-                            Log.e(TAG, "DATOS GENERALES: "+ datosPaser);
-                            productsAdapter.adicionarListaProducts(products);
+                            boolean estado = productResponse.isStatus();
+                            if (estado){
+                                ArrayList<Product> products = productResponse.getData();
+                                productsAdapter.adicionarListaProducts(products);
+
+                                /*Gson gson = new Gson();
+                                String datosPaser = gson.toJson(response.body().getData().get(0).getPrecios());
+                                Log.e(TAG, "DATOS GENERALES: "+ datosPaser);*/
+
+                            } else {
+                                Product product = new Product();
+                                product.setNombre("Sin coincidencias");
+                                productsAdapter.adicionarVacio(product);
+                            }
+
+
+                            //Log.e(TAG, "DATOS GENERALES: "+ datosPaser);
+
+
                         } else {
                             Log.e(TAG, "NO SE PUDO CONECTAR : " + response.errorBody());
                         }

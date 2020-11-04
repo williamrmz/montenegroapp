@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +16,10 @@ import com.example.appnuevo.R;
 import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
 
@@ -40,7 +44,31 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Product product = productsList.get(position);
         holder.nombre.setText(product.getNombre());
         holder.categoria.setText(product.getCategoria());
+
+        int cantidadPrecios = product.getPrecios().size();
+
+        Gson gson = new Gson();
+        String datosSpinner = gson.toJson(product.getPrecios());
+
+                //holder.precios.setText(product.getPrecios().get(0).getPrecio());}
+
+        ArrayList<Precios> precios = new ArrayList<Precios>();
+        for (int i=0; i<cantidadPrecios; i++){
+            Precios prices = new Precios();
+            prices.setIdprecio(product.getPrecios().get(i).getIdprecio());
+            prices.setNombre(product.getPrecios().get(i).getNombre());
+            prices.setPrecio(product.getPrecios().get(i).getPrecio());
+            Log.e(TAG, "SPINNER : "+prices.getPrecio());
+        }
+
+        //ArrayAdapter<Precios> adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, Integer.parseInt(gson.toJson(precios)));
+
+        //holder.precios.setAdapter(adaptador);
+
+
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -57,12 +85,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void adicionarVacio(Product product) {
+        productsList.add(product);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nombre, categoria;
+        Spinner precios;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.tvNameSearch);
             categoria = itemView.findViewById(R.id.tvCategorySearch);
+            precios = itemView.findViewById(R.id.spnPrecios);
         }
     }
 }

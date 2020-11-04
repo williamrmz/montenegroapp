@@ -62,15 +62,13 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-
-
-                <TextView
-                    android:id="@+id/tvSalesPurchase"
+                <Spinner
+                    android:id="@+id/spnPrecios"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:paddingRight="5dp"
-                    android:text="TOTAL"
+                    android:text="Precios"
                     android:textColor="#DC1E1E"
                     android:textSize="18sp" />
 
