@@ -14,7 +14,10 @@
         <EditText
             android:id="@+id/etBuscador"
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:hint="Nombre Cliente"
+            android:text="CLIENTE"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

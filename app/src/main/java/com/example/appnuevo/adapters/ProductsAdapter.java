@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,27 +46,37 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.nombre.setText(product.getNombre());
         holder.categoria.setText(product.getCategoria());
 
-        int cantidadPrecios = product.getPrecios().size();
+        if (product.getPrecios() != null){
+            int cantidadPrecios = product.getPrecios().size();
+            ArrayList<Precios> precios = new ArrayList<Precios>();
+            for (int i=0; i<cantidadPrecios; i++){
+                Precios prices = new Precios();
+                prices.setIdprecio(product.getPrecios().get(i).getIdprecio());
+                prices.setNombre(product.getPrecios().get(i).getNombre());
+                prices.setPrecioCompra(product.getPrecios().get(i).getPrecioCompra());
+                prices.setPrecioVenta(product.getPrecios().get(i).getPrecioVenta());
+                precios.add(prices);
+                //Log.e(TAG, "SPINNER : "+prices.getPrecio());
+                //Log.e(TAG, "SPINNER : "+ gson.toJson( precios));
+            }
+            //Gson gson = new Gson();
+            //Log.e(TAG, "SPINNER : "+ gson.toJson(precios));
+            ArrayAdapter<Precios> adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, precios);
+            adaptador.setDropDownViewResource( R.layout.support_simple_spinner_dropdown_item);
+            holder.precios.setAdapter(adaptador);
 
-        Gson gson = new Gson();
-        String datosSpinner = gson.toJson(product.getPrecios());
+            holder.precios.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Precios precioinfo = (Precios) adapterView.getSelectedItem();
+                    Log.e(TAG, "SPINNER : "+precioinfo.getPrecioVenta());
+                }
 
-                //holder.precios.setText(product.getPrecios().get(0).getPrecio());}
-
-        ArrayList<Precios> precios = new ArrayList<Precios>();
-        for (int i=0; i<cantidadPrecios; i++){
-            Precios prices = new Precios();
-            prices.setIdprecio(product.getPrecios().get(i).getIdprecio());
-            prices.setNombre(product.getPrecios().get(i).getNombre());
-            prices.setPrecio(product.getPrecios().get(i).getPrecio());
-            Log.e(TAG, "SPINNER : "+prices.getPrecio());
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                }
+            });
         }
-
-        //ArrayAdapter<Precios> adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, Integer.parseInt(gson.toJson(precios)));
-
-        //holder.precios.setAdapter(adaptador);
-
-
 
     }
 

@@ -88,11 +88,6 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
                                 product.setNombre("Sin coincidencias");
                                 productsAdapter.adicionarVacio(product);
                             }
-
-
-                            //Log.e(TAG, "DATOS GENERALES: "+ datosPaser);
-
-
                         } else {
                             Log.e(TAG, "NO SE PUDO CONECTAR : " + response.errorBody());
                         }
