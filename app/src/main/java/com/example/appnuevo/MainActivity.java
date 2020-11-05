@@ -1,13 +1,8 @@
 package com.example.appnuevo;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
 
-import com.example.appnuevo.dialogs.DialogSearchProduct;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -31,23 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-/*
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final FragmentManager fm = getFragmentManager();
-                final DialogSearchProduct dl = new DialogSearchProduct();
-                dl.show(getSupportFragmentManager(), "TAG");
-            }
-        });
-
-*/
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setDrawerLayout(drawer)

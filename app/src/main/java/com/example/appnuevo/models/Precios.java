@@ -1,10 +1,15 @@
 package com.example.appnuevo.models;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Precios {
     private String idprecio;
     private String nombre;
-    private String precioCompra;
-    private String precioVenta;
+    private String pcompra;
+    private String pventa;
+    private String porcentaje;
+    private String cantidadunidad;
 
 
     public String getIdprecio() {
@@ -23,23 +28,41 @@ public class Precios {
         this.nombre = nombre;
     }
 
-    public String getPrecioCompra() {
-        return precioCompra;
+    public String getPcompra() {
+        return pcompra;
     }
 
-    public void setPrecioCompra(String precioCompra) {
-        this.precioCompra = precioCompra;
+    public void setPcompra(String pcompra) {
+        this.pcompra = pcompra;
     }
 
-    public String getPrecioVenta() {
-        return precioVenta;
+    public String getPventa() {
+        return pventa;
     }
 
-    public void setPrecioVenta(String precioVenta) {
-        this.precioVenta = precioVenta;
+    public void setPventa(String pventa) {
+        this.pventa = pventa;
+    }
+
+    public String getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(String porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public String getCantidadunidad() {
+        return cantidadunidad;
+    }
+
+    public void setCantidadunidad(String cantidadunidad) {
+        this.cantidadunidad = cantidadunidad;
     }
 
     public String toString(){
-        return nombre + " " + precioVenta;
+        NumberFormat nf = new DecimalFormat("##.###");
+        String cantidad =  nf.format(Double.parseDouble(cantidadunidad));
+        return nombre + " cant : " +  cantidad +  " | precio: " + pventa;
     }
 }

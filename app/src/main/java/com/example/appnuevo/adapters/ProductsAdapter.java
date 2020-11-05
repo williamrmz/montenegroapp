@@ -1,7 +1,6 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
+import com.example.appnuevo.interfaces.RecyclerViewClickInterface;
 import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
-import com.example.appnuevo.models.ProductResponse;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
 
     private static final String TAG = "API";
     Context context;
     ArrayList<Product> productsList;
+    private RecyclerViewClickInterface recyclerViewClickInterfaceProduct;
 
-    public ProductsAdapter(Context context) {
+    public ProductsAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterfaceProduct) {
         this.context = context;
         productsList = new ArrayList<>();
+        this.recyclerViewClickInterfaceProduct = recyclerViewClickInterfaceProduct;
     }
 
     @NonNull
@@ -53,8 +52,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 Precios prices = new Precios();
                 prices.setIdprecio(product.getPrecios().get(i).getIdprecio());
                 prices.setNombre(product.getPrecios().get(i).getNombre());
-                prices.setPrecioCompra(product.getPrecios().get(i).getPrecioCompra());
-                prices.setPrecioVenta(product.getPrecios().get(i).getPrecioVenta());
+                prices.setPcompra(product.getPrecios().get(i).getPcompra());
+                prices.setPventa(product.getPrecios().get(i).getPventa());
+                prices.setPorcentaje(product.getPrecios().get(i).getPorcentaje());
+                prices.setCantidadunidad(product.getPrecios().get(i).getCantidadunidad());
                 precios.add(prices);
                 //Log.e(TAG, "SPINNER : "+prices.getPrecio());
                 //Log.e(TAG, "SPINNER : "+ gson.toJson( precios));
@@ -69,7 +70,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     Precios precioinfo = (Precios) adapterView.getSelectedItem();
-                    Log.e(TAG, "SPINNER : "+precioinfo.getPrecioVenta());
+                    //Log.e(TAG, "SPINNER : "+precioinfo.getPrecioVenta());
                 }
 
                 @Override
@@ -77,7 +78,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 }
             });
         }
-
     }
 
 
@@ -102,6 +102,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView nombre, categoria;
         Spinner precios;
         public ViewHolder(@NonNull View itemView) {
@@ -109,6 +110,17 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             nombre = itemView.findViewById(R.id.tvNameSearch);
             categoria = itemView.findViewById(R.id.tvCategorySearch);
             precios = itemView.findViewById(R.id.spnPrecios);
+
+            //evento con la interface
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerViewClickInterfaceProduct.onItemClick(getAdapterPosition());
+                }
+            });
         }
+
     }
+
+
 }

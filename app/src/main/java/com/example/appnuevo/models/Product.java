@@ -41,4 +41,7 @@ public class Product {
     public void setPrecios(ArrayList<Precios> precios) {
         this.precios = precios;
     }
+
+
+
 }

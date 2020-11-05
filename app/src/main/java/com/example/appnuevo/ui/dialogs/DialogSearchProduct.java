@@ -1,7 +1,5 @@
-package com.example.appnuevo.dialogs;
+package com.example.appnuevo.ui.dialogs;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,35 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsAdapter;
+import com.example.appnuevo.adapters.ProductsSelectedAdapter;
 import com.example.appnuevo.apis.ApiClient;
-import com.example.appnuevo.models.Precios;
+import com.example.appnuevo.interfaces.RecyclerViewClickInterface;
 import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DialogSearchProduct extends AppCompatDialogFragment {
+public class DialogSearchProduct extends AppCompatDialogFragment implements RecyclerViewClickInterface {
 
 
     private static final String TAG = "API";
@@ -46,6 +38,8 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
     private RecyclerView recyclerView;
     private ProductsAdapter productsAdapter;
     private EditText buscador;
+    ArrayList<Product> products;
+    private ProductsSelectedAdapter productsSelectedAdapter;
 
 
     @Nullable
@@ -53,10 +47,10 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //View rootView = inflater.inflate(R.layout.dialogframent_search_product, container);
         View view = inflater.inflate(R.layout.dialogframent_search_product, container, false);
-        Log.e(TAG, "SEARCHPRODUCTFRAGMENT CREATED");
+        //Log.e(TAG, "SEARCHPRODUCTFRAGMENT CREATED");
 
         recyclerView = view.findViewById(R.id.recyclerViewSearch);
-        productsAdapter = new ProductsAdapter(this.getContext());
+        productsAdapter = new ProductsAdapter(this.getContext(), this);
         recyclerView.setAdapter(productsAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -76,7 +70,7 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
 
                             boolean estado = productResponse.isStatus();
                             if (estado){
-                                ArrayList<Product> products = productResponse.getData();
+                                products = productResponse.getData();
                                 productsAdapter.adicionarListaProducts(products);
 
                                 /*Gson gson = new Gson();
@@ -114,8 +108,6 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
                 }else { productsAdapter.limpiarProducts(); }
             }
 
-
-
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -123,30 +115,20 @@ public class DialogSearchProduct extends AppCompatDialogFragment {
         });
 
         //this.searchProduct();
+        productsSelectedAdapter = new ProductsSelectedAdapter(getContext());
+
         return view;
     }
 
-    /*
-    public void searchProduct(){
-        Call<ProductResponse> call = ApiClient.getUserService().searchProductMatch("CHIZI");
-        call.enqueue(new Callback<ProductResponse>() {
-            @Override
-            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                if(response.isSuccessful()){
-                    ProductResponse productResponse = response.body();
-                    ArrayList<Product> products = productResponse.getData();
-                    //Log.e(TAG, "DATA : "+products.toString());}
-                    productsAdapter.adicionarListaProducts(products);
-                } else {
-                    Log.e(TAG, "NO SE PUDO CONECTAR : " + response.errorBody());
-                }
-            }
-            @Override
-            public void onFailure(Call<ProductResponse> call, Throwable t) {
-                Log.e(TAG, "ONFAILURE SALES : " + t.toString());
-            }
-        });
+    @Override
+    public void onItemClick(int position) {
+        //Toast.makeText(getContext(), products.get(position).toString(), Toast.LENGTH_SHORT).show();
+        productsSelectedAdapter.agregarProducto(products.get(position));
+        getDialog().dismiss();
     }
 
-     */
+    @Override
+    public void onLongItemClick(int postion) {
+    }
+
 }
