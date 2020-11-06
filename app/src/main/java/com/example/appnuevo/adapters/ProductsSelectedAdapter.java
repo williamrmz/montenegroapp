@@ -31,15 +31,14 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
         productsSelectedList = new ArrayList<>();
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_products_selected, parent, false);
         return new ProductsSelectedAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         ProductSelect productSelect = productsSelectedList.get(position);
         Log.e(TAG, "DATO : "+productSelect.toString());
     }
@@ -59,7 +58,7 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nombre, precio, categoria, total;
         EditText cantidad;
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.tvNameSelected);
             categoria = itemView.findViewById(R.id.tvCategorySelected);

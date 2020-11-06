@@ -149,8 +149,12 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
         productSelect.setCantidadunidad(precios.getCantidadunidad());
 
         //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
-        //productsSelectedAdapter.agregarProducto(productSelect);
-        //model.setProducts(productSelect);
+        productsSelectedAdapter.agregarProducto(productSelect);
+
+        //SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentByTag("API");
+        //searchFragment.productSelects.add(productSelect);
+        //searchFragment.productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
+
         getDialog().dismiss();
     }
 
@@ -165,12 +169,12 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (onDismissListener != null) {
+       /* if (onDismissListener != null) {
             SearchFragment searchFragment = new SearchFragment();
             searchFragment.productSelect = productSelect;
             Log.e(TAG, "product : " + searchFragment.productSelect);
             onDismissListener.onDismiss(dialog);
-        }
+        }*/
     }
 
 }

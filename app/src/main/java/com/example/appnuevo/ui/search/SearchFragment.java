@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,14 +21,19 @@ import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.ui.dialogs.DialogSearchProduct;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class SearchFragment extends Fragment {
 
     private static final String TAG = "API";
+
 
     private RecyclerView recyclerView;
     private ProductsSelectedAdapter productsSelectedAdapter;
     DialogSearchProduct dialogSearchProduct;
     public ProductSelect productSelect;
+    public ArrayList<ProductSelect> productSelects;
+    private FloatingActionButton boton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,21 +45,29 @@ public class SearchFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogSearchProduct dl = new DialogSearchProduct();
-                dl.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        Log.e(TAG, "SE CERRÓ : " + productSelect.toString());
-                    }
-                });
-                dl.show(getFragmentManager(), "TAG");
-            }
-        });
+        boton = view.findViewById(R.id.fab);
+
+
+        //FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogSearchProduct dl = new DialogSearchProduct();
+                dl.setTargetFragment(SearchFragment.this, 1);
+                /*dl.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //Log.e(TAG, "SE CERRÓ : " + productSelects.toString());
+                    }
+                });*/
+                dl.show(getFragmentManager(), "DialogSearhProduct");
+            }
+        });
+    }
 }
