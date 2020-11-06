@@ -3,13 +3,40 @@ package com.example.appnuevo.models;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class Precios {
+public class ProductSelect {
+    private String idproducto;
+    private String nombre_producto;
+    private String nombre_categoria;
     private String idprecio;
     private String nombre_precio;
     private String pcompra;
     private String pventa;
     private String porcentaje;
     private String cantidadunidad;
+
+    public String getIdproducto() {
+        return idproducto;
+    }
+
+    public void setIdproducto(String idproducto) {
+        this.idproducto = idproducto;
+    }
+
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
+
+    public String getNombre_categoria() {
+        return nombre_categoria;
+    }
+
+    public void setNombre_categoria(String nombre_categoria) {
+        this.nombre_categoria = nombre_categoria;
+    }
 
     public String getIdprecio() {
         return idprecio;
@@ -59,11 +86,21 @@ public class Precios {
         this.cantidadunidad = cantidadunidad;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         NumberFormat nf = new DecimalFormat("##.###");
         String cantidad =  nf.format(Double.parseDouble(cantidadunidad));
-        return nombre_precio + " cant : " +  cantidad +  " | precio: " + pventa;
+
+        return "ProductSelect{" +
+                "idproducto='" + idproducto + '\'' +
+                ", nombre_producto='" + nombre_producto + '\'' +
+                ", nombre_categoria='" + nombre_categoria + '\'' +
+                ", idprecio='" + idprecio + '\'' +
+                ", nombre_precio='" + nombre_precio + '\'' +
+                ", pcompra='" + pcompra + '\'' +
+                ", pventa='" + pventa + '\'' +
+                ", porcentaje='" + porcentaje + '\'' +
+                ", cantidadunidad='" + cantidad + '\'' +
+                '}';
     }
-
-
 }

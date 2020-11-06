@@ -9,10 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
 import com.example.appnuevo.models.Product;
+import com.example.appnuevo.models.ProductSelect;
+import com.example.appnuevo.ui.dialogs.SearchProductViewModel;
+import com.example.appnuevo.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 
@@ -20,7 +24,7 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
 
     private static final String TAG = "API";
     Context context;
-    ArrayList<Product> productsSelectedList;
+    ArrayList<ProductSelect> productsSelectedList;
 
     public ProductsSelectedAdapter(Context context) {
         this.context = context;
@@ -36,8 +40,8 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Product product = productsSelectedList.get(position);
-        Log.e(TAG, "ASDASDSAD : ");
+        ProductSelect productSelect = productsSelectedList.get(position);
+        Log.e(TAG, "DATO : "+productSelect.toString());
     }
 
     @Override
@@ -45,10 +49,10 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
         return productsSelectedList.size();
     }
 
-    public void agregarProducto(Product product) {
-        productsSelectedList.add(product);
-        //Log.e(TAG, "ASDASDSAD : "+productsSelectedList.get(0).getPrecios().get(0).getCantidadunidad());
-        Log.e(TAG, "CANTIDAD : "+productsSelectedList.size());
+    public void agregarProducto(ProductSelect productSelect) {
+        productsSelectedList.add(productSelect);
+        Log.e(TAG, "DATO : "+productsSelectedList.toString());
+
         notifyDataSetChanged();
     }
 

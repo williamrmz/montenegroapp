@@ -1,5 +1,6 @@
 package com.example.appnuevo.ui.search;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsAdapter;
 import com.example.appnuevo.adapters.ProductsSelectedAdapter;
+import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.ui.dialogs.DialogSearchProduct;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,12 +26,14 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ProductsSelectedAdapter productsSelectedAdapter;
+    DialogSearchProduct dialogSearchProduct;
+    public ProductSelect productSelect;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerViewSearch);
+        recyclerView = view.findViewById(R.id.recyclerViewSelect);
         productsSelectedAdapter = new ProductsSelectedAdapter(this.getContext());
         recyclerView.setAdapter(productsSelectedAdapter);
         recyclerView.setHasFixedSize(true);
@@ -39,13 +43,17 @@ public class SearchFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DialogSearchProduct dl = new DialogSearchProduct();
+                DialogSearchProduct dl = new DialogSearchProduct();
+                dl.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.e(TAG, "SE CERRÓ : " + productSelect.toString());
+                    }
+                });
                 dl.show(getFragmentManager(), "TAG");
             }
         });
-
         return view;
     }
-
 
 }

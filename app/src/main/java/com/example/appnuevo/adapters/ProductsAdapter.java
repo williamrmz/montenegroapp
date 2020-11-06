@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,41 +43,15 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productsList.get(position);
-        holder.nombre.setText(product.getNombre());
-        holder.categoria.setText(product.getCategoria());
+        holder.nombre.setText(product.getNombre_producto());
+        holder.categoria.setText(product.getNombre_categoria());
 
         if (product.getPrecios() != null){
-            int cantidadPrecios = product.getPrecios().size();
-            ArrayList<Precios> precios = new ArrayList<Precios>();
-            for (int i=0; i<cantidadPrecios; i++){
-                Precios prices = new Precios();
-                prices.setIdprecio(product.getPrecios().get(i).getIdprecio());
-                prices.setNombre(product.getPrecios().get(i).getNombre());
-                prices.setPcompra(product.getPrecios().get(i).getPcompra());
-                prices.setPventa(product.getPrecios().get(i).getPventa());
-                prices.setPorcentaje(product.getPrecios().get(i).getPorcentaje());
-                prices.setCantidadunidad(product.getPrecios().get(i).getCantidadunidad());
-                precios.add(prices);
-                //Log.e(TAG, "SPINNER : "+prices.getPrecio());
-                //Log.e(TAG, "SPINNER : "+ gson.toJson( precios));
-            }
-            //Gson gson = new Gson();
-            //Log.e(TAG, "SPINNER : "+ gson.toJson(precios));
+            //reemplaza al bucle, ya que trae un arreglo de objetos el getprecios
+            ArrayList<Precios> precios = product.getPrecios();
             ArrayAdapter<Precios> adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, precios);
             adaptador.setDropDownViewResource( R.layout.support_simple_spinner_dropdown_item);
             holder.precios.setAdapter(adaptador);
-
-            holder.precios.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Precios precioinfo = (Precios) adapterView.getSelectedItem();
-                    //Log.e(TAG, "SPINNER : "+precioinfo.getPrecioVenta());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                }
-            });
         }
     }
 
@@ -115,11 +90,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    recyclerViewClickInterfaceProduct.onItemClick(getAdapterPosition());
+                    // precios.getSelectedItem() objeto del view seleccionado
+                    recyclerViewClickInterfaceProduct.onItemClick(getAdapterPosition() , precios.getSelectedItem());
                 }
             });
         }
-
     }
 
 

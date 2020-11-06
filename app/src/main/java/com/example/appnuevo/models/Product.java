@@ -6,8 +6,8 @@ public class Product {
 
 
     private String idproducto;
-    private String nombre;
-    private String categoria;
+    private String nombre_producto;
+    private String nombre_categoria;
     private ArrayList<Precios> precios;
 
     public String getIdproducto() {
@@ -18,20 +18,20 @@ public class Product {
         this.idproducto = idproducto;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre_producto() {
+        return nombre_producto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getNombre_categoria() {
+        return nombre_categoria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setNombre_categoria(String nombre_categoria) {
+        this.nombre_categoria = nombre_categoria;
     }
 
     public ArrayList<Precios> getPrecios() {
@@ -41,6 +41,7 @@ public class Product {
     public void setPrecios(ArrayList<Precios> precios) {
         this.precios = precios;
     }
+
 
 
 

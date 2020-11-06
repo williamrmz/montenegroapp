@@ -1,5 +1,6 @@
 package com.example.appnuevo.ui.dialogs;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +24,11 @@ import com.example.appnuevo.adapters.ProductsAdapter;
 import com.example.appnuevo.adapters.ProductsSelectedAdapter;
 import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.interfaces.RecyclerViewClickInterface;
+import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
+import com.example.appnuevo.models.ProductSelect;
+import com.example.appnuevo.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 
@@ -30,8 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DialogSearchProduct extends AppCompatDialogFragment implements RecyclerViewClickInterface {
-
+public class DialogSearchProduct extends DialogFragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "API";
 
@@ -41,12 +46,15 @@ public class DialogSearchProduct extends AppCompatDialogFragment implements Recy
     ArrayList<Product> products;
     private ProductsSelectedAdapter productsSelectedAdapter;
 
+    //private SearchProductViewModel model;
+    public ProductSelect productSelect;
+    private DialogInterface.OnDismissListener onDismissListener;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //View rootView = inflater.inflate(R.layout.dialogframent_search_product, container);
-        View view = inflater.inflate(R.layout.dialogframent_search_product, container, false);
+        View view = inflater.inflate(R.layout.dialogframent_search_product, container, true);
         //Log.e(TAG, "SEARCHPRODUCTFRAGMENT CREATED");
 
         recyclerView = view.findViewById(R.id.recyclerViewSearch);
@@ -79,7 +87,7 @@ public class DialogSearchProduct extends AppCompatDialogFragment implements Recy
 
                             } else {
                                 Product product = new Product();
-                                product.setNombre("Sin coincidencias");
+                                product.setNombre_producto("Sin coincidencias");
                                 productsAdapter.adicionarVacio(product);
                             }
                         } else {
@@ -91,7 +99,6 @@ public class DialogSearchProduct extends AppCompatDialogFragment implements Recy
                         Log.e(TAG, "ONFAILURE SALES : " + t.toString());
                     }
                 });
-
             }
 
             @Override
@@ -114,21 +121,56 @@ public class DialogSearchProduct extends AppCompatDialogFragment implements Recy
             }
         });
 
-        //this.searchProduct();
         productsSelectedAdapter = new ProductsSelectedAdapter(getContext());
+
 
         return view;
     }
 
     @Override
-    public void onItemClick(int position) {
-        //Toast.makeText(getContext(), products.get(position).toString(), Toast.LENGTH_SHORT).show();
-        productsSelectedAdapter.agregarProducto(products.get(position));
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //model = new ViewModelProvider(requireActivity()).get(SearchProductViewModel.class);
+    }
+
+    @Override
+    public void onItemClick(int position, Object preciodata) {
+        Product datoseleccionado = products.get(position);
+        Precios precios = (Precios) preciodata;
+        productSelect = new ProductSelect();
+        productSelect.setIdproducto(datoseleccionado.getIdproducto());
+        productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
+        productSelect.setNombre_categoria(datoseleccionado.getNombre_categoria());
+        productSelect.setIdprecio(precios.getIdprecio());
+        productSelect.setNombre_precio(precios.getNombre_precio());
+        productSelect.setPcompra(precios.getPcompra());
+        productSelect.setPventa(precios.getPventa());
+        productSelect.setPorcentaje(precios.getPorcentaje());
+        productSelect.setCantidadunidad(precios.getCantidadunidad());
+
+        //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
+        //productsSelectedAdapter.agregarProducto(productSelect);
+        //model.setProducts(productSelect);
         getDialog().dismiss();
     }
 
     @Override
     public void onLongItemClick(int postion) {
+    }
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            SearchFragment searchFragment = new SearchFragment();
+            searchFragment.productSelect = productSelect;
+            Log.e(TAG, "product : " + searchFragment.productSelect);
+            onDismissListener.onDismiss(dialog);
+        }
     }
 
 }
