@@ -17,8 +17,8 @@ public class ApiClient {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                //.baseUrl("http://192.168.56.1/repo-monte/public/")
-                .baseUrl("http://192.168.1.7/repo-monte/public/")
+                .baseUrl("http://192.168.56.1/repo-monte/public/")
+                //.baseUrl("http://192.168.1.7/repo-monte/public/")
                 .client(okHttpClient)
                 .build();
 

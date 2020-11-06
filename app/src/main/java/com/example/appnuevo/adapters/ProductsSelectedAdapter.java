@@ -40,7 +40,8 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ProductSelect productSelect = productsSelectedList.get(position);
-        Log.e(TAG, "DATO : "+productSelect.toString());
+        holder.nombre.setText(productSelect.getNombre_producto());
+        Log.e(TAG, "DATO : "+ productSelect.toString());
     }
 
     @Override
@@ -51,7 +52,6 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
     public void agregarProducto(ProductSelect productSelect) {
         productsSelectedList.add(productSelect);
         Log.e(TAG, "DATO : "+productsSelectedList.toString());
-
         notifyDataSetChanged();
     }
 

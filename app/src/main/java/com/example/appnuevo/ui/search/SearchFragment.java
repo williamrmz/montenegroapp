@@ -1,7 +1,9 @@
 package com.example.appnuevo.ui.search;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +23,7 @@ import com.example.appnuevo.adapters.ProductsSelectedAdapter;
 import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.ui.dialogs.DialogSearchProduct;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -27,13 +31,12 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "API";
 
-
     private RecyclerView recyclerView;
     private ProductsSelectedAdapter productsSelectedAdapter;
-    DialogSearchProduct dialogSearchProduct;
-    public ProductSelect productSelect;
-    public ArrayList<ProductSelect> productSelects;
     private FloatingActionButton boton;
+    private ArrayList<ProductSelect> products;
+    private ProductSelect productSelect;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +53,11 @@ public class SearchFragment extends Fragment {
 
         //FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
+        Intent intent = new Intent();
+        Gson gson = new Gson();
+        intent.putExtra("STRING_RESULT", gson.toJson(productSelect));
+
+
         return view;
     }
 
@@ -58,6 +66,7 @@ public class SearchFragment extends Fragment {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
                 DialogSearchProduct dl = new DialogSearchProduct();
                 dl.setTargetFragment(SearchFragment.this, 1);
                 /*dl.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -69,5 +78,31 @@ public class SearchFragment extends Fragment {
                 dl.show(getFragmentManager(), "DialogSearhProduct");
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure fragment codes match up
+        if (requestCode == 1) {
+            String editTextString = data.getStringExtra("lakey");
+            Gson gson = new Gson();
+            ProductSelect producto = gson.fromJson(editTextString, ProductSelect.class);
+
+            /*productSelect = new ProductSelect();
+            productSelect.setIdproducto(producto.getIdproducto());
+            productSelect.setNombre_producto(producto.getNombre_producto());
+            productSelect.setNombre_categoria(producto.getNombre_categoria());
+            productSelect.setIdprecio(producto.getIdprecio());
+            productSelect.setNombre_precio(producto.getNombre_precio());
+            productSelect.setPcompra(producto.getPcompra());
+            productSelect.setPventa(producto.getPventa());
+            productSelect.setPorcentaje(producto.getPorcentaje());
+            productSelect.setCantidadunidad(producto.getCantidadunidad());*/
+
+            //productsSelectedAdapter.agregarProducto(productSelect);;
+            productsSelectedAdapter.agregarProducto(producto);
+
+        }else{
+            Log.e(TAG, "nada : " );
+        }
     }
 }

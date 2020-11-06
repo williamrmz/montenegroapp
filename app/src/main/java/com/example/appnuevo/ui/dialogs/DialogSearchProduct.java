@@ -1,6 +1,7 @@
 package com.example.appnuevo.ui.dialogs;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,6 +30,7 @@ import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
 import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.ui.search.SearchFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -45,8 +47,6 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
     private EditText buscador;
     ArrayList<Product> products;
     private ProductsSelectedAdapter productsSelectedAdapter;
-
-    //private SearchProductViewModel model;
     public ProductSelect productSelect;
     private DialogInterface.OnDismissListener onDismissListener;
 
@@ -149,12 +149,8 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
         productSelect.setCantidadunidad(precios.getCantidadunidad());
 
         //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
-        productsSelectedAdapter.agregarProducto(productSelect);
-
-        //SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentByTag("API");
-        //searchFragment.productSelects.add(productSelect);
-        //searchFragment.productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
-
+        //productsSelectedAdapter.agregarProducto(productSelect);
+        sendResult(1);
         getDialog().dismiss();
     }
 
@@ -175,6 +171,14 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
             Log.e(TAG, "product : " + searchFragment.productSelect);
             onDismissListener.onDismiss(dialog);
         }*/
+    }
+
+    private void sendResult(int REQUEST_CODE) {
+        Intent intent = new Intent();
+        Gson gson = new Gson();
+        intent.putExtra("lakey", gson.toJson(productSelect));
+        getTargetFragment().onActivityResult(
+                getTargetRequestCode(), REQUEST_CODE, intent);
     }
 
 }
