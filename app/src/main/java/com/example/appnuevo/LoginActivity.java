@@ -29,9 +29,9 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "MONTENEGRO";
-    EditText user, password, tipo;
+    EditText user, password;
     Button btnLogin;
-    ArrayList<Usuario> listaUsuario;
+    public int idusuario=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         user = findViewById(R.id.edUser);
         password = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnLogin);
-
     }
 
     public void login(View view){
@@ -51,25 +50,20 @@ public class LoginActivity extends AppCompatActivity {
         loginRequest.setTipo("1");
 
         Call<LoginResponse> loginResponseCall = ApiClient.getUserService().userLogin(loginRequest);
-        //Call<LoginResponse> loginResponseCall = ApiClient.getUserService().userLogin(user.getText().toString() , password.getText().toString(), "1");
         loginResponseCall.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
-                   /* Gson gson = new Gson();
-                    String loginResponse = gson.toJson(response.body());
-                    Log.e(TAG, "PRECIOS: "+ loginResponse);*/
-
                    LoginResponse loginResponse = response.body();
                     ArrayList<Usuario> coleccion = loginResponse.getData();
                     boolean estado = loginResponse.isStatus();
                     if (estado){
+                        idusuario = Integer.parseInt(coleccion.get(0).getIdusuario());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         Toast.makeText(LoginActivity.this,coleccion.get(0).getNombre()+" Logeado", Toast.LENGTH_LONG).show();
                     }else {
                         Toast.makeText(LoginActivity.this,"Datos incorrectos", Toast.LENGTH_LONG).show();
                     }
-
                 }else{
                     Toast.makeText(LoginActivity.this,"Hubo un problema : " + response.errorBody(), Toast.LENGTH_LONG).show();
                 }

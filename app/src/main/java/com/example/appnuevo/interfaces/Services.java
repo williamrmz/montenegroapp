@@ -3,6 +3,7 @@ package com.example.appnuevo.interfaces;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
+import com.example.appnuevo.models.Venta;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -21,8 +22,9 @@ public interface Services {
     //Call<LoginResponse> userLogin(@Query("user") String user, @Query("password") String password, @Query("tipo") String tipo);
 
     @POST("producto/busqueda")
-    Call<ProductResponse> searchProductMatch(@Query("texto") String texto, @Query("page") int page);
+    Call<ProductResponse> searchProductMatch(@Query("texto") String texto);
 
-    @POST("producto/busqueda")
-    Call<ResponseBody> search(@Query("texto") String texto);
+
+    @POST("vetas")
+    Call<ResponseBody> registerSale(@Body Venta venta);
 }

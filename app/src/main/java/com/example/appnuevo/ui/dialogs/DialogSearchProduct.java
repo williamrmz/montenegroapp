@@ -48,7 +48,6 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
     ArrayList<Product> products;
     private ProductsSelectedAdapter productsSelectedAdapter;
     public ProductSelect productSelect;
-    private DialogInterface.OnDismissListener onDismissListener;
 
 
     @Nullable
@@ -67,8 +66,9 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
 
         buscador.addTextChangedListener(new TextWatcher() {
 
-            private void search(String input, int page) {
-                Call<ProductResponse> call = ApiClient.getUserService().searchProductMatch(input, page);
+            //BUSQUEDA DEENTRO DEL TEXTWATCHER
+            private void search(String input) {
+                Call<ProductResponse> call = ApiClient.getUserService().searchProductMatch(input);
                 call.enqueue(new Callback<ProductResponse>() {
                     @Override
                     public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -106,12 +106,13 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
 
             }
 
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String proudcto = buscador.getText().toString();
 
                 if (proudcto.length() > 3){
-                    this.search(proudcto.toString(), 0);
+                    this.search(proudcto);
                 }else { productsAdapter.limpiarProducts(); }
             }
 
@@ -122,7 +123,6 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
         });
 
         productsSelectedAdapter = new ProductsSelectedAdapter(getContext());
-
 
         return view;
     }
@@ -135,50 +135,40 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
 
     @Override
     public void onItemClick(int position, Object preciodata) {
-        Product datoseleccionado = products.get(position);
-        Precios precios = (Precios) preciodata;
-        productSelect = new ProductSelect();
-        productSelect.setIdproducto(datoseleccionado.getIdproducto());
-        productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
-        productSelect.setNombre_categoria(datoseleccionado.getNombre_categoria());
-        productSelect.setIdprecio(precios.getIdprecio());
-        productSelect.setNombre_precio(precios.getNombre_precio());
-        productSelect.setPcompra(precios.getPcompra());
-        productSelect.setPventa(precios.getPventa());
-        productSelect.setPorcentaje(precios.getPorcentaje());
-        productSelect.setCantidadunidad(precios.getCantidadunidad());
+        if (preciodata == null){
 
-        //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
-        //productsSelectedAdapter.agregarProducto(productSelect);
-        sendResult(1);
-        getDialog().dismiss();
+            getDialog().dismiss();
+        }else {
+            Product datoseleccionado = products.get(position);
+            Precios precios = (Precios) preciodata;
+            productSelect = new ProductSelect();
+            productSelect.setIdproducto(datoseleccionado.getIdproducto());
+            productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
+            productSelect.setNombre_categoria(datoseleccionado.getNombre_categoria());
+            productSelect.setIdprecio(precios.getIdprecio());
+            productSelect.setNombre_precio(precios.getNombre_precio());
+            productSelect.setPcompra(precios.getPcompra());
+            productSelect.setPventa(precios.getPventa());
+            productSelect.setPorcentaje(precios.getPorcentaje());
+            productSelect.setCantidadunidad(precios.getCantidadunidad());
+
+            //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
+            //productsSelectedAdapter.agregarProducto(productSelect);
+            sendResult(1);
+            getDialog().dismiss();
+        }
+
     }
 
     @Override
     public void onLongItemClick(int postion) {
     }
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-        this.onDismissListener = onDismissListener;
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-       /* if (onDismissListener != null) {
-            SearchFragment searchFragment = new SearchFragment();
-            searchFragment.productSelect = productSelect;
-            Log.e(TAG, "product : " + searchFragment.productSelect);
-            onDismissListener.onDismiss(dialog);
-        }*/
-    }
-
     private void sendResult(int REQUEST_CODE) {
         Intent intent = new Intent();
         Gson gson = new Gson();
         intent.putExtra("lakey", gson.toJson(productSelect));
-        getTargetFragment().onActivityResult(
-                getTargetRequestCode(), REQUEST_CODE, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
     }
 
 }
