@@ -8,11 +8,20 @@ public class ProductSelect {
     private String nombre_producto;
     private String nombre_categoria;
     private String idprecio;
-    private String nombre_precio;
+    private String undm;
     private String pcompra;
     private String pventa;
-    private String porcentaje;
-    private String cantidadunidad;
+    private String sundm;
+    private String cant;
+    private String cantidad = "1";
+
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
 
     public String getIdproducto() {
         return idproducto;
@@ -46,12 +55,12 @@ public class ProductSelect {
         this.idprecio = idprecio;
     }
 
-    public String getNombre_precio() {
-        return nombre_precio;
+    public String getUndm() {
+        return undm;
     }
 
-    public void setNombre_precio(String nombre_precio) {
-        this.nombre_precio = nombre_precio;
+    public void setUndm(String undm) {
+        this.undm = undm;
     }
 
     public String getPcompra() {
@@ -70,36 +79,36 @@ public class ProductSelect {
         this.pventa = pventa;
     }
 
-    public String getPorcentaje() {
-        return porcentaje;
+    public String getSundm() {
+        return sundm;
     }
 
-    public void setPorcentaje(String porcentaje) {
-        this.porcentaje = porcentaje;
+    public void setSundm(String sundm) {
+        this.sundm = sundm;
     }
 
-    public String getCantidadunidad() {
-        return cantidadunidad;
+    public String getCant() {
+        return cant;
     }
 
-    public void setCantidadunidad(String cantidadunidad) {
-        this.cantidadunidad = cantidadunidad;
+    public void setCant(String cant) {
+        this.cant = cant;
     }
 
     @Override
     public String toString() {
         NumberFormat nf = new DecimalFormat("##.###");
-        String cantidad =  nf.format(Double.parseDouble(cantidadunidad));
+        String cantidad =  nf.format(Double.parseDouble(cant));
 
         return "ProductSelect{" +
                 "idproducto='" + idproducto + '\'' +
                 ", nombre_producto='" + nombre_producto + '\'' +
                 ", nombre_categoria='" + nombre_categoria + '\'' +
                 ", idprecio='" + idprecio + '\'' +
-                ", nombre_precio='" + nombre_precio + '\'' +
+                ", nombre_precio='" + undm + '\'' +
                 ", pcompra='" + pcompra + '\'' +
                 ", pventa='" + pventa + '\'' +
-                ", porcentaje='" + porcentaje + '\'' +
+                ", porcentaje='" + sundm + '\'' +
                 ", cantidadunidad='" + cantidad + '\'' +
                 '}';
     }

@@ -5,11 +5,11 @@ import java.text.NumberFormat;
 
 public class Precios {
     private String idprecio;
-    private String nombre_precio;
+    private String undm;
     private String pcompra;
     private String pventa;
-    private String porcentaje;
-    private String cantidadunidad;
+    private String sundm;
+    private String cant;
 
     public String getIdprecio() {
         return idprecio;
@@ -19,12 +19,12 @@ public class Precios {
         this.idprecio = idprecio;
     }
 
-    public String getNombre_precio() {
-        return nombre_precio;
+    public String getUndm() {
+        return undm;
     }
 
-    public void setNombre_precio(String nombre_precio) {
-        this.nombre_precio = nombre_precio;
+    public void setUndm(String undm) {
+        this.undm = undm;
     }
 
     public String getPcompra() {
@@ -43,26 +43,27 @@ public class Precios {
         this.pventa = pventa;
     }
 
-    public String getPorcentaje() {
-        return porcentaje;
+
+    public String getSundm() {
+        return sundm;
     }
 
-    public void setPorcentaje(String porcentaje) {
-        this.porcentaje = porcentaje;
+    public void setSundm(String sundm) {
+        this.sundm = sundm;
     }
 
-    public String getCantidadunidad() {
-        return cantidadunidad;
+    public String getCant() {
+        return cant;
     }
 
-    public void setCantidadunidad(String cantidadunidad) {
-        this.cantidadunidad = cantidadunidad;
+    public void setCant(String cant) {
+        this.cant = cant;
     }
 
     public String toString(){
         NumberFormat nf = new DecimalFormat("##.###");
-        String cantidad =  nf.format(Double.parseDouble(cantidadunidad));
-        return nombre_precio + " cant : " +  cantidad +  " | precio: " + pventa;
+        String cantidad =  nf.format(Double.parseDouble(cant));
+        return undm + " cant : " +  cantidad +  " | precio: " + pventa;
     }
 
 

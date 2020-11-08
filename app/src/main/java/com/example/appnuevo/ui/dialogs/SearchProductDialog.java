@@ -1,6 +1,5 @@
 package com.example.appnuevo.ui.dialogs;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,13 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +25,6 @@ import com.example.appnuevo.models.Precios;
 import com.example.appnuevo.models.Product;
 import com.example.appnuevo.models.ProductResponse;
 import com.example.appnuevo.models.ProductSelect;
-import com.example.appnuevo.ui.search.SearchFragment;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -38,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DialogSearchProduct extends DialogFragment implements RecyclerViewClickInterface {
+public class SearchProductDialog extends DialogFragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "API";
 
@@ -130,7 +125,6 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //model = new ViewModelProvider(requireActivity()).get(SearchProductViewModel.class);
     }
 
     @Override
@@ -146,11 +140,12 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
             productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
             productSelect.setNombre_categoria(datoseleccionado.getNombre_categoria());
             productSelect.setIdprecio(precios.getIdprecio());
-            productSelect.setNombre_precio(precios.getNombre_precio());
+            productSelect.setNombre_precio(precios.getUndm());
             productSelect.setPcompra(precios.getPcompra());
             productSelect.setPventa(precios.getPventa());
-            productSelect.setPorcentaje(precios.getPorcentaje());
-            productSelect.setCantidadunidad(precios.getCantidadunidad());
+            productSelect.setSundm(precios.getSundm());
+            productSelect.setCant(precios.getCant());
+            //productSelect.setCundm(precios.gec);
 
             //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
             //productsSelectedAdapter.agregarProducto(productSelect);
@@ -168,6 +163,7 @@ public class DialogSearchProduct extends DialogFragment implements RecyclerViewC
         Intent intent = new Intent();
         Gson gson = new Gson();
         intent.putExtra("lakey", gson.toJson(productSelect));
+        //intent.puta("lakey", productSelect);
         getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
     }
 

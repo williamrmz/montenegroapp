@@ -1,5 +1,9 @@
 package com.example.appnuevo.models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Venta {
@@ -9,6 +13,24 @@ public class Venta {
     private String num_documento;
     private int idusuario;
     private String serie_documento;
+    private ArrayList<DetalleVenta> detalleVentas;
+    private String json;
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
+
+    public ArrayList<DetalleVenta> getDetalleVentas() {
+        return detalleVentas;
+    }
+
+    public void setDetalleVentas(ArrayList<DetalleVenta> detalleVentas) {
+        this.detalleVentas = detalleVentas;
+    }
 
     public int getIdcliente() {
         return idcliente;
@@ -56,5 +78,20 @@ public class Venta {
 
     public void setSerie_documento(String serie_documento) {
         this.serie_documento = serie_documento;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "idcliente=" + idcliente +
+                ", fecha_venta='" + fecha_venta + '\'' +
+                ", tipo_documento='" + tipo_documento + '\'' +
+                ", num_documento='" + num_documento + '\'' +
+                ", idusuario=" + idusuario +
+                ", serie_documento='" + serie_documento + '\'' +
+                ", detalleVentas=" + detalleVentas +
+                ", json='" + json + '\'' +
+                '}';
     }
 }

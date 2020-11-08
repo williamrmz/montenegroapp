@@ -25,6 +25,6 @@ public interface Services {
     Call<ProductResponse> searchProductMatch(@Query("texto") String texto);
 
 
-    @POST("vetas")
+    @POST("ventas")
     Call<ResponseBody> registerSale(@Body Venta venta);
 }

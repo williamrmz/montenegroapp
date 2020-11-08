@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,24 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appnuevo.LoginActivity;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsSelectedAdapter;
+import com.example.appnuevo.apis.ApiClient;
+import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.ProductSelect;
-import com.example.appnuevo.models.Usuario;
 import com.example.appnuevo.models.Venta;
-import com.example.appnuevo.ui.dialogs.DialogSearchProduct;
+import com.example.appnuevo.ui.dialogs.SearchProductDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment {
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ListProductsFragment extends Fragment {
 
     private static final String TAG = "API";
 
     private RecyclerView recyclerView;
     private ProductsSelectedAdapter productsSelectedAdapter;
     private FloatingActionButton boton, accept;
-    private ArrayList<ProductSelect> products;
-    private ProductSelect productSelect;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,10 +55,6 @@ public class SearchFragment extends Fragment {
         boton = view.findViewById(R.id.fab);
         accept = view.findViewById(R.id.accept);
 
-        //Intent intent = new Intent();
-       // Gson gson = new Gson();
-        //intent.putExtra("STRING_RESULT", gson.toJson(productSelect));
-
         return view;
     }
 
@@ -63,8 +64,8 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                DialogSearchProduct dl = new DialogSearchProduct();
-                dl.setTargetFragment(SearchFragment.this, 1);
+                SearchProductDialog dl = new SearchProductDialog();
+                dl.setTargetFragment(ListProductsFragment.this, 1);
                 dl.show(getFragmentManager(), "DialogSearhProduct");
             }
         });
@@ -72,28 +73,56 @@ public class SearchFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
             registerSale();
             }
         });
     }
 
     public void registerSale(){
+        Gson gson = new Gson();
         Venta venta = new Venta();
-        //venta.setIdcliente();
-        LoginActivity loginActivity = new LoginActivity();
-        Log.e(TAG, "usuario : "+loginActivity.idusuario );
+        venta.setIdcliente(3067);
+        venta.setTipo_documento("Boleta");
+        venta.setNum_documento("Desdeapp");
+        venta.setIdusuario(Integer.parseInt(LoginActivity.usuario.getIdusuario()));
+        venta.setSerie_documento("Seriedesdeapp");
+
+        venta.setDetalleVentas(productsSelectedAdapter.listProducts());
+        //venta.setJson(gson.toJson(productsSelectedAdapter.listProducts()));
+
+        Log.e(TAG, "VENTA "+ gson.toJson(venta));
+        //Log.e(TAG, "VENTA "+ venta);
+
+        /*Call<ResponseBody> call = ApiClient.getUserService().registerSale(venta);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getContext(),"Se Registró Venta " , Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(),"No se pudo registrar ", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(),"Error en conexión", Toast.LENGTH_LONG).show();
+            }
+        });*/
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            String editTextString = data.getStringExtra("lakey");
+            String productPut = data.getStringExtra("lakey");
             Gson gson = new Gson();
             //gson ayuda a deserealizar el objeto enviado con la clase
-            ProductSelect producto = gson.fromJson(editTextString, ProductSelect.class);
+            ProductSelect producto = gson.fromJson(productPut, ProductSelect.class);
             productsSelectedAdapter.agregarProducto(producto);
+            //Log.e(TAG, "XD "+producto);
         }else{
             Log.e(TAG, "nada : " );
         }
     }
+
 }

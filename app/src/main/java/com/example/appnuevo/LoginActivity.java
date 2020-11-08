@@ -14,30 +14,24 @@ import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.Usuario;
-import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "MONTENEGRO";
+    private static final String TAG = "API";
     EditText user, password;
     Button btnLogin;
-    public int idusuario=2;
+    static public Usuario usuario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         user = findViewById(R.id.edUser);
         password = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -58,7 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                     ArrayList<Usuario> coleccion = loginResponse.getData();
                     boolean estado = loginResponse.isStatus();
                     if (estado){
-                        idusuario = Integer.parseInt(coleccion.get(0).getIdusuario());
+                        usuario = coleccion.get(0);
+                        //userInterface.addUser(coleccion.get(0));
+                        //Log.e(TAG, "nada : "+ coleccion.get(0).toString() );
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         Toast.makeText(LoginActivity.this,coleccion.get(0).getNombre()+" Logeado", Toast.LENGTH_LONG).show();
                     }else {

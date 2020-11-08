@@ -55,12 +55,13 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
             @Override
             public void afterTextChanged(Editable editable) {
                 int  espacio_texto_total = holder.cantidad.getText().toString().length();
-                Log.e(TAG, "ESPACIO : "+espacio_texto_total);
                 if(espacio_texto_total >= 1){
                     double precio_parse = Double.parseDouble(holder.precio.getText().toString());
                     double cantidad_parse = Double.parseDouble(holder.cantidad.getText().toString());
                     double tota_parse = precio_parse * cantidad_parse;
                     holder.total.setText("Total S/."+ df.format(tota_parse));
+
+                    productSelect.setCantidad(holder.cantidad.getText().toString());
                 } else {
                     holder.total.setText("Total S/. 0.0");
                 }
@@ -75,8 +76,13 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
 
     public void agregarProducto(ProductSelect productSelect) {
         productsSelectedList.add(productSelect);
-        Log.e(TAG, "DATO : "+productsSelectedList.toString());
         notifyDataSetChanged();
+    }
+
+    public ArrayList listProducts(){
+
+
+        return productsSelectedList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
