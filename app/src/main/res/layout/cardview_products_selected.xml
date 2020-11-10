@@ -56,9 +56,22 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:hint="Precio"
-                        android:textColor="#2196F3"
+                        android:inputType="numberDecimal"
+                        android:selectAllOnFocus="true"
+                        android:textColor="#FF16776E"
                         android:textSize="13dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/tvPaquete"
+                        android:layout_width="55dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Unidad"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:textColor="#FF16776E"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvCategorySelected"
@@ -82,16 +95,33 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:hint="CANTIDAD"
-                        android:textColor="#2196F3"
+                        android:inputType="number"
+                        android:selectAllOnFocus="true"
+                        android:textColor="#16776E"
                         android:textSize="13dp"
                         android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Total S/. "
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:paddingRight="0dp"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
 
                     <EditText
                         android:id="@+id/tvTotalSelected"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="TOTAL: S/."
-                        android:textColor="#2196F3"
+                        android:hint="500"
+                        android:inputType="number|numberDecimal"
+                        android:paddingLeft="0dp"
+                        android:selectAllOnFocus="true"
+                        android:textColor="#7E170F"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 

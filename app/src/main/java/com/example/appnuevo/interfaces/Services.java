@@ -3,6 +3,7 @@ package com.example.appnuevo.interfaces;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
+import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
 
 import okhttp3.ResponseBody;
@@ -26,5 +27,5 @@ public interface Services {
 
 
     @POST("ventas")
-    Call<ResponseBody> registerSale(@Body Venta venta);
+    Call<Request> registerSale(@Body Venta venta);
 }

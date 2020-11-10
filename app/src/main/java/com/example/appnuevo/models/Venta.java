@@ -16,21 +16,6 @@ public class Venta {
     private ArrayList<DetalleVenta> detalleVentas;
     private String json;
 
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
-    }
-
-    public ArrayList<DetalleVenta> getDetalleVentas() {
-        return detalleVentas;
-    }
-
-    public void setDetalleVentas(ArrayList<DetalleVenta> detalleVentas) {
-        this.detalleVentas = detalleVentas;
-    }
 
     public int getIdcliente() {
         return idcliente;
@@ -78,6 +63,23 @@ public class Venta {
 
     public void setSerie_documento(String serie_documento) {
         this.serie_documento = serie_documento;
+    }
+
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
+
+    public ArrayList<DetalleVenta> getDetalleVentas() {
+        return detalleVentas;
+    }
+
+    public void setDetalleVentas(ArrayList<DetalleVenta> detalleVentas) {
+        this.detalleVentas = detalleVentas;
     }
 
 

@@ -92,24 +92,28 @@ public class ProductSelect {
     }
 
     public void setCant(String cant) {
-        this.cant = cant;
+        NumberFormat nf = new DecimalFormat("##.###");
+        this.cant = nf.format(Double.parseDouble(cant));
     }
+
 
     @Override
     public String toString() {
         NumberFormat nf = new DecimalFormat("##.###");
-        String cantidad =  nf.format(Double.parseDouble(cant));
+        //String cantunidad =  nf.format(Double.parseDouble(cant));
+        //String cant = nf.format()
 
         return "ProductSelect{" +
                 "idproducto='" + idproducto + '\'' +
                 ", nombre_producto='" + nombre_producto + '\'' +
                 ", nombre_categoria='" + nombre_categoria + '\'' +
                 ", idprecio='" + idprecio + '\'' +
-                ", nombre_precio='" + undm + '\'' +
+                ", undm='" + undm + '\'' +
                 ", pcompra='" + pcompra + '\'' +
                 ", pventa='" + pventa + '\'' +
-                ", porcentaje='" + sundm + '\'' +
-                ", cantidadunidad='" + cantidad + '\'' +
+                ", sundm='" + sundm + '\'' +
+                ", cant='" + cant + '\'' +
+                ", cantidad='" + cantidad + '\'' +
                 '}';
     }
 }

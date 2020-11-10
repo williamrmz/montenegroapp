@@ -1,4 +1,4 @@
-package com.example.appnuevo.ui.search;
+package com.example.appnuevo.ui.select;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,16 +20,13 @@ import com.example.appnuevo.LoginActivity;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsSelectedAdapter;
 import com.example.appnuevo.apis.ApiClient;
-import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.ProductSelect;
+import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.ui.dialogs.SearchProductDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +53,7 @@ public class ListProductsFragment extends Fragment {
         boton = view.findViewById(R.id.fab);
         accept = view.findViewById(R.id.accept);
 
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView);
         return view;
     }
 
@@ -91,13 +90,16 @@ public class ListProductsFragment extends Fragment {
         //venta.setJson(gson.toJson(productsSelectedAdapter.listProducts()));
 
         Log.e(TAG, "VENTA "+ gson.toJson(venta));
-        //Log.e(TAG, "VENTA "+ venta);
+        Log.e(TAG, "VENTA "+ venta);
 
-        /*Call<ResponseBody> call = ApiClient.getUserService().registerSale(venta);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<Request> call = ApiClient.getUserService().registerSale(venta);
+        call.enqueue(new Callback<Request>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<Request> call, Response<Request> response) {
                 if (response.isSuccessful()){
+                    //Request request = response.body();
+                    //Log.e(TAG, "REQUEST : " +  request.getRequest().toString());}
+                    productsSelectedAdapter.clearList();
                     Toast.makeText(getContext(),"Se Registró Venta " , Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -105,10 +107,10 @@ public class ListProductsFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Request> call, Throwable t) {
                 Toast.makeText(getContext(),"Error en conexión", Toast.LENGTH_LONG).show();
             }
-        });*/
+        });
 
     }
 
@@ -124,5 +126,17 @@ public class ListProductsFragment extends Fragment {
             Log.e(TAG, "nada : " );
         }
     }
+
+    ItemTouchHelper.SimpleCallback itemTouch = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            productsSelectedAdapter.remove(viewHolder.getAdapterPosition());
+        }
+    };
 
 }

@@ -140,7 +140,7 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
             productSelect.setNombre_producto(datoseleccionado.getNombre_producto());
             productSelect.setNombre_categoria(datoseleccionado.getNombre_categoria());
             productSelect.setIdprecio(precios.getIdprecio());
-            productSelect.setNombre_precio(precios.getUndm());
+            productSelect.setUndm(precios.getUndm());
             productSelect.setPcompra(precios.getPcompra());
             productSelect.setPventa(precios.getPventa());
             productSelect.setSundm(precios.getSundm());

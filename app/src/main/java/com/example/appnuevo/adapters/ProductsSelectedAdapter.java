@@ -42,10 +42,34 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
         holder.categoria.setText(productSelect.getNombre_categoria());
         holder.precio.setText(productSelect.getPventa());
         holder.cantidad.setText("1");
+        holder.paquete.setText(productSelect.getUndm() + " " + productSelect.getCant());
 
         DecimalFormat df = new DecimalFormat("#.00");
         String preciototal= df.format(Double.parseDouble(holder.precio.getText().toString()) * Double.parseDouble(holder.cantidad.getText().toString()));
-        holder.total.setText("Total S/."+preciototal);
+        holder.total.setText(preciototal);
+
+
+        holder.precio.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int  espacio_texto_total = holder.precio.getText().toString().length();
+                int  espacio_texto_total2 = holder.cantidad.getText().toString().length();
+                if(espacio_texto_total >= 1 && espacio_texto_total2>=1){
+                    double precio_parse = Double.parseDouble(holder.precio.getText().toString());
+                    double cantidad_parse = Double.parseDouble(holder.cantidad.getText().toString());
+                    double tota_parse = precio_parse * cantidad_parse;
+                    holder.total.setText(df.format(tota_parse));
+
+                    productSelect.setCantidad(holder.cantidad.getText().toString());
+                } else {
+                    holder.total.setText("0.0");
+                }
+            }
+        });
 
         holder.cantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -55,15 +79,16 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
             @Override
             public void afterTextChanged(Editable editable) {
                 int  espacio_texto_total = holder.cantidad.getText().toString().length();
-                if(espacio_texto_total >= 1){
+                int  espacio_texto_total2 = holder.precio.getText().toString().length();
+                if(espacio_texto_total >= 1 && espacio_texto_total2>=1){
                     double precio_parse = Double.parseDouble(holder.precio.getText().toString());
                     double cantidad_parse = Double.parseDouble(holder.cantidad.getText().toString());
                     double tota_parse = precio_parse * cantidad_parse;
-                    holder.total.setText("Total S/."+ df.format(tota_parse));
+                    holder.total.setText(df.format(tota_parse));
 
                     productSelect.setCantidad(holder.cantidad.getText().toString());
                 } else {
-                    holder.total.setText("Total S/. 0.0");
+                    holder.total.setText("0.0");
                 }
             }
         });
@@ -80,15 +105,24 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
     }
 
     public ArrayList listProducts(){
-
-
         return productsSelectedList;
+    }
+
+
+    public void clearList() {
+        this.productsSelectedList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void remove(int position){
+        this.productsSelectedList.remove(position);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         //CardviewProductsSelectedBinding cardviewProductsSelectedBinding;
         TextView nombre, categoria;
-        EditText cantidad, precio,total ;
+        EditText cantidad, precio,total, paquete ;
             public ViewHolder(View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.tvNameSelected);
@@ -96,6 +130,7 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
             precio = itemView.findViewById(R.id.tvPriceSelected);
             cantidad = itemView.findViewById(R.id.etCantSelected);
             total = itemView.findViewById(R.id.tvTotalSelected);
+            paquete = itemView.findViewById(R.id.tvPaquete);
         }
     }
 

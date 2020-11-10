@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_inicio" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.appnuevo.ui.search.ListProductsFragment"
-        android:label="@string/menu_gallery"
+        android:id="@+id/nav_sale"
+        android:name="com.example.appnuevo.ui.select.ListProductsFragment"
+        android:label="@string/menu_sale"
         tools:layout="@layout/fragment_products_selected" />
 
     <fragment
