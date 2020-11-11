@@ -69,12 +69,18 @@ public class ListProductsFragment extends Fragment {
             }
         });
 
-        accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            registerSale();
-            }
-        });
+        if(productsSelectedAdapter.getItemCount() >=1){
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    registerSale();
+                }
+            });
+        } else {
+            Toast.makeText(getContext(),"No se ha ingresado productos " , Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     public void registerSale(){
