@@ -1,4 +1,4 @@
-package com.example.appnuevo.ui.inicio;
+package com.example.appnuevo.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

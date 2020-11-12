@@ -6,33 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.select.ListProductsFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/etBuscador"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:textSize="30sp"
-            android:hint="Buscar..."/>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewSearch"
+                android:id="@+id/recyclerViewDetails"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/cardview_products"/>
+                tools:listitem="@layout/cardview_details"/>
 
         </RelativeLayout>
 
-
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

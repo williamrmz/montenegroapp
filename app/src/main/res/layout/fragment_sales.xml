@@ -4,19 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.select.ListProductsFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/etBuscador"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:textSize="30sp"
-            android:hint="Buscar..."/>
+    tools:context=".ui.sales.SalesFragment">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,15 +12,11 @@
             android:gravity="bottom">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewSearch"
+                android:id="@+id/recyclerViewSales"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/cardview_products"/>
+                tools:listitem="@layout/cardview_sales"/>
 
         </RelativeLayout>
-
-
-    </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

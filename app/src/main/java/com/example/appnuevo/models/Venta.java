@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Venta {
+    private int idventa;
     private int idcliente;
     private String fecha_venta;
     private String tipo_documento;
@@ -14,8 +15,15 @@ public class Venta {
     private int idusuario;
     private String serie_documento;
     private ArrayList<DetalleVenta> detalleVentas;
-    private String json;
 
+
+    public int getIdventa() {
+        return idventa;
+    }
+
+    public void setIdventa(int idventa) {
+        this.idventa = idventa;
+    }
 
     public int getIdcliente() {
         return idcliente;
@@ -66,14 +74,6 @@ public class Venta {
     }
 
 
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
-    }
-
     public ArrayList<DetalleVenta> getDetalleVentas() {
         return detalleVentas;
     }
@@ -93,7 +93,6 @@ public class Venta {
                 ", idusuario=" + idusuario +
                 ", serie_documento='" + serie_documento + '\'' +
                 ", detalleVentas=" + detalleVentas +
-                ", json='" + json + '\'' +
                 '}';
     }
 }

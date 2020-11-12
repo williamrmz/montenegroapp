@@ -62,25 +62,23 @@ public class ListProductsFragment extends Fragment {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
+                //FragmentManager fm = getActivity().getSupportFragmentManager();
                 SearchProductDialog dl = new SearchProductDialog();
                 dl.setTargetFragment(ListProductsFragment.this, 1);
                 dl.show(getFragmentManager(), "DialogSearhProduct");
             }
         });
 
-        if(productsSelectedAdapter.getItemCount() >=1){
-            accept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(productsSelectedAdapter.getItemCount() >=1){
                     registerSale();
+                }else {
+                    Toast.makeText(getContext(),"No se ha ingresado productos " , Toast.LENGTH_SHORT).show();
                 }
-            });
-        } else {
-            Toast.makeText(getContext(),"No se ha ingresado productos " , Toast.LENGTH_SHORT).show();
-        }
-
-
+            }
+        });
     }
 
     public void registerSale(){
@@ -93,10 +91,9 @@ public class ListProductsFragment extends Fragment {
         venta.setSerie_documento("Seriedesdeapp");
 
         venta.setDetalleVentas(productsSelectedAdapter.listProducts());
-        //venta.setJson(gson.toJson(productsSelectedAdapter.listProducts()));
 
-        Log.e(TAG, "VENTA "+ gson.toJson(venta));
-        Log.e(TAG, "VENTA "+ venta);
+        //Log.e(TAG, "VENTA "+ gson.toJson(venta));
+        //Log.e(TAG, "VENTA "+ venta);
 
         Call<Request> call = ApiClient.getUserService().registerSale(venta);
         call.enqueue(new Callback<Request>() {
@@ -117,7 +114,6 @@ public class ListProductsFragment extends Fragment {
                 Toast.makeText(getContext(),"Error en conexión", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,7 +123,6 @@ public class ListProductsFragment extends Fragment {
             //gson ayuda a deserealizar el objeto enviado con la clase
             ProductSelect producto = gson.fromJson(productPut, ProductSelect.class);
             productsSelectedAdapter.agregarProducto(producto);
-            //Log.e(TAG, "XD "+producto);
         }else{
             Log.e(TAG, "nada : " );
         }

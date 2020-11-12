@@ -5,6 +5,7 @@ import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
 import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
+import com.example.appnuevo.models.VentaResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -28,4 +29,7 @@ public interface Services {
 
     @POST("ventas")
     Call<Request> registerSale(@Body Venta venta);
+
+    @GET("ventas")
+    Call<VentaResponse> listSales(@Query("idusuario") int idusuario, @Query("page") int page);
 }

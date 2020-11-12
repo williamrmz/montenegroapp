@@ -9,6 +9,7 @@ public class DetalleVenta {
     private int cundm;
     private String sundm;
     private double precio_compra;
+    private String nombre_producto;
 
     public int getIdproducto() { return idproducto; }
 
@@ -38,6 +39,14 @@ public class DetalleVenta {
     public double getPrecio_compra() { return precio_compra; }
 
     public void setPrecio_compra(double precio_compra) { this.precio_compra = precio_compra; }
+
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
 
     @Override
     public String toString() {

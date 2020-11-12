@@ -145,10 +145,7 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
             productSelect.setPventa(precios.getPventa());
             productSelect.setSundm(precios.getSundm());
             productSelect.setCant(precios.getCant());
-            //productSelect.setCundm(precios.gec);
 
-            //Toast.makeText(getContext(), precios.toString(), Toast.LENGTH_SHORT).show();
-            //productsSelectedAdapter.agregarProducto(productSelect);
             sendResult(1);
             getDialog().dismiss();
         }

@@ -1,4 +1,4 @@
-package com.example.appnuevo.ui.slideshow;
+package com.example.appnuevo.ui.sales;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

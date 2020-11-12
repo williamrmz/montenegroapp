@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.appnuevo.ui.inicio.HomeFragment"
+        android:name="com.example.appnuevo.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_inicio" />
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_sale"
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.appnuevo.ui.slideshow.SlideshowFragment"
+        android:name="com.example.appnuevo.ui.sales.SalesFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_sales" />
 </navigation>
