@@ -36,8 +36,13 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     private SalesAdapter salesAdapter;
     private int page;
     private boolean aptoParaCargar;
-    ArrayList<Venta> ventaList;
+    //ArrayList<Venta> ventaList;
+    VentaResponse ventaResponse;
+    ArrayList<Venta> contList;
 
+    public SalesFragment() {
+        this.contList = new ArrayList<>();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +85,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         aptoParaCargar = true;
-        page = 0;
+        page = 1;
         listSales(page);
     }
 
@@ -92,9 +97,12 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
             public void onResponse(Call<VentaResponse> call, Response<VentaResponse> response) {
                 aptoParaCargar = true;
                 if (response.isSuccessful()){
-                    VentaResponse ventaResponse = response.body();
-                    ventaList = ventaResponse.getData();
-                    //Log.e(TAG, "data : "+ ventaList);
+                    ventaResponse = response.body();
+                    //ventalist va agregando al adaptador, no debe acumularse o se suman otra vez
+                    ArrayList<Venta> ventaList = ventaResponse.getData();
+
+                    //contlist para para que vaya acumulando con las entradas
+                    contList.addAll(ventaResponse.getData());
                     salesAdapter.addSales(ventaList);
                 }else {
                     Log.e(TAG, "Error en la respuesta : "+response.errorBody());
@@ -117,7 +125,10 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
 
     @Override
     public void sendDetail(int pos) {
-        Venta venta = ventaList.get(pos);
+        //Venta venta = contList.get(pos);
+        //Log.e(TAG, "POSICIÓN : "+ pos + " DATOS : "+ venta);
+        Venta venta = contList.get(pos);
+        //Log.e(TAG, "DETALLE : " + venta.getDetalleVentas());
         DetallesDialog detallesDialog = new DetallesDialog(venta.getDetalleVentas());
         detallesDialog.show(getFragmentManager(), "detalledialog");
     }

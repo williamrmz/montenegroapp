@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,14 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     Context context;
     ArrayList<DetalleVenta> detalleVentasList;
 
-    public DetailAdapter(Context context) {
+    /*public DetailAdapter(Context context) {
         this.context = context;
         detalleVentasList = new ArrayList<>();
+    }*/
+
+    public DetailAdapter(Context context, ArrayList<DetalleVenta> detalleVentasList) {
+        this.context = context;
+        this.detalleVentasList = detalleVentasList;
     }
 
     @NonNull
@@ -34,8 +40,19 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //DetalleVenta detalleVenta = detalleVentasList.get(position);
-        //holder.nombre.setText(detalleVenta.getNombre_producto());
+       DetalleVenta detalleVenta = detalleVentasList.get(position);
+
+        if(detalleVentasList.size() >= 1){
+            holder.nombre.setText(detalleVenta.getNombre_producto());
+            holder.cantidad.setText("Canitdad : " + String.valueOf(detalleVenta.getCantidad()));
+            holder.precio.setText("Precio : " + String.valueOf(detalleVenta.getPrecio_unitario()));
+            double totalventa = detalleVenta.getCantidad() * detalleVenta.getPrecio_unitario();
+            holder.total.setText("Total S/." + String.valueOf(totalventa));
+        } else {
+            holder.nombre.setText("No hay detalles");
+        }
+
+
     }
 
     @Override
@@ -49,7 +66,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        EditText nombre, precio, cantidad, total;
+        TextView nombre, precio, cantidad, total;
         public ViewHolder(View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.tvNombreDetail);

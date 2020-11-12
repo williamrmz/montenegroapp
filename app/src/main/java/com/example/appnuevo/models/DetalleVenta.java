@@ -58,6 +58,7 @@ public class DetalleVenta {
                 ", cundm=" + cundm +
                 ", sundm='" + sundm + '\'' +
                 ", precio_compra=" + precio_compra +
+                ", nombre_producto='" + nombre_producto + '\'' +
                 '}';
     }
 }

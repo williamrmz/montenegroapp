@@ -1,5 +1,6 @@
 package com.example.appnuevo.ui.dialogs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.DetailAdapter;
 import com.example.appnuevo.adapters.ProductsAdapter;
 import com.example.appnuevo.models.DetalleVenta;
+import com.example.appnuevo.models.ProductSelect;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -36,15 +39,16 @@ public class DetallesDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialogfragment_details, container, false);
-        //Log.e(TAG, "DATOS GENERALES: "+ detalleVentasList);
-        recyclerView = view.findViewById(R.id.recyclerViewSales);
-        detailAdapter = new DetailAdapter(getContext());
+        View view = inflater.inflate(R.layout.dialogfragment_details, container, true);
+        recyclerView = view.findViewById(R.id.recyclerViewDetails);
+        detailAdapter = new DetailAdapter(this.getContext(), detalleVentasList);
         recyclerView.setAdapter(detailAdapter);
-        //recyclerView.setHasFixedSize(true);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         //detailAdapter.addListDetails(detalleVentasList);
+        //Log.e(TAG, "DETALLELIST "  + detalleVentasList.size());
         return view;
     }
+
 }
