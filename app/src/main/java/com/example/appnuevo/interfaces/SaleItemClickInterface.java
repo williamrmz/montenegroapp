@@ -7,4 +7,6 @@ import java.util.ArrayList;
 public interface SaleItemClickInterface {
 
     void sendDetail(int pos);
+
+
 }

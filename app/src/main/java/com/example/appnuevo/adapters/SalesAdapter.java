@@ -2,6 +2,7 @@ package com.example.appnuevo.adapters;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView idVenta, fecha, doc;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -68,6 +69,24 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> 
                     saleItemClickInterface.sendDetail(getAdapterPosition());
                 }
             });
+
+            itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                    //menu.setHeaderTitle("CRUD");
+                    menu.add(0,1,0,"PDF");
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
         }
+
     }
+
+
 }

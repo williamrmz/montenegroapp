@@ -21,11 +21,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     Context context;
     ArrayList<DetalleVenta> detalleVentasList;
 
-    /*public DetailAdapter(Context context) {
-        this.context = context;
-        detalleVentasList = new ArrayList<>();
-    }*/
-
     public DetailAdapter(Context context, ArrayList<DetalleVenta> detalleVentasList) {
         this.context = context;
         this.detalleVentasList = detalleVentasList;
@@ -51,8 +46,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         } else {
             holder.nombre.setText("No hay detalles");
         }
-
-
     }
 
     @Override

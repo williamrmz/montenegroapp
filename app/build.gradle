@@ -12,6 +12,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,4 +57,9 @@ dependencies {
 
     implementation "androidx.fragment:fragment:1.2.5"
     implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

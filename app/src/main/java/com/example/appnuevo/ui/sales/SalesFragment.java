@@ -3,9 +3,12 @@ package com.example.appnuevo.ui.sales;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.interfaces.SaleItemClickInterface;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.VentaResponse;
+import com.example.appnuevo.pdfs.TickectPDF;
 import com.example.appnuevo.ui.dialogs.DetallesDialog;
 
 import java.util.ArrayList;
@@ -39,6 +43,11 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     //ArrayList<Venta> ventaList;
     VentaResponse ventaResponse;
     ArrayList<Venta> contList;
+    TickectPDF tickectPDF;
+
+    private String[] header = {"id", "nombre", "apellido"};
+    private String shortText = "Hola";
+    private String lognText = "CUERPO DEL TEXTOOOOOOOOOOO";
 
     public SalesFragment() {
         this.contList = new ArrayList<>();
@@ -77,8 +86,29 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
             }
         });
 
+
+        tickectPDF = new TickectPDF(getContext());
+        tickectPDF.openDocument();
+        tickectPDF.addMetaData("Clientes", "Ventas", "William");
+        tickectPDF.addTitles("DISTRIBUIDORA & COMERCIONALIZADORA","ELIZABETH S.R.L.",
+                                "NICOLAS CUGLIVAN 210-074602962 - 948023073" +
+                                    "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
+        tickectPDF.addParagraph(shortText);
+        tickectPDF.addParagraph(lognText);
+        tickectPDF.createTable(header, getClients());
+        tickectPDF.closeDocument();
+
         return view;
 
+    }
+
+    private ArrayList<String[]> getClients(){
+        ArrayList<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"1", "Pedro", "Prueba1"});
+        rows.add(new String[]{"2", "Miguel", "Prueba2"});
+        rows.add(new String[]{"3", "William", "Prueba3"});
+
+        return rows;
     }
 
     @Override
@@ -117,19 +147,24 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-    }
 
     @Override
     public void sendDetail(int pos) {
-        //Venta venta = contList.get(pos);
-        //Log.e(TAG, "POSICIÓN : "+ pos + " DATOS : "+ venta);
         Venta venta = contList.get(pos);
-        //Log.e(TAG, "DETALLE : " + venta.getDetalleVentas());
         DetallesDialog detallesDialog = new DetallesDialog(venta.getDetalleVentas());
         detallesDialog.show(getFragmentManager(), "detalledialog");
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1: //EXAMEN 1
+            {
+                tickectPDF.appViewPDF(this.getActivity());
+            }
+            break;
+        }
+        return super.onContextItemSelected(item);
     }
 }
