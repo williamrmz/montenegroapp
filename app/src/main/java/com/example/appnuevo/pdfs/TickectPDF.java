@@ -46,6 +46,7 @@ public class TickectPDF {
         createFile();
         try {
             document = new Document(PageSize.A7);
+            //document.siz
             pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             document.open();
         } catch (Exception e) {
