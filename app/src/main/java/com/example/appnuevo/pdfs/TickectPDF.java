@@ -42,7 +42,7 @@ public class TickectPDF {
     private Font fHighText = new Font(Font.FontFamily.HELVETICA, 8);
 
     private Font fHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
-    private Font fCell = new Font(Font.FontFamily.HELVETICA, 9);
+    private Font fCell = new Font(Font.FontFamily.HELVETICA, 8);
 
 
 
@@ -57,9 +57,9 @@ public class TickectPDF {
             document = new Document();
             //document = new Document(PageSize.A7);
             pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
-            Rectangle one = new Rectangle(209, 600);
+            Rectangle one = new Rectangle(214, 600);
             document.setPageSize(one);
-            document.setMargins(2,2,2,2);
+            document.setMargins(3,2,2,2);
             document.open();
         } catch (Exception e) {
             Log.e(TAG, "ERROR : " + e.getLocalizedMessage());
@@ -123,6 +123,8 @@ public class TickectPDF {
             pdfPTable = new PdfPTable(header.length);
             pdfPTable.setWidthPercentage(100);
             pdfPTable.setSpacingBefore(5);
+            //pdfPTable.setWidths();
+            pdfPTable.setTotalWidth(new float[]{15,13,40,17,15});
             PdfPCell pdfPCell;
             int indexC = 0;
             while (indexC < header.length) {
@@ -135,15 +137,21 @@ public class TickectPDF {
             }
             for(int indexR=0; indexR< clients.size(); indexR++){
                 String[] row = clients.get(indexR);
-                for(indexC = 0; indexC< header.length; indexC++){
+                for(indexC = 0; indexC < header.length; indexC++){
                     pdfPCell = new PdfPCell(new Phrase(row[indexC], fCell));
                     pdfPCell.setUseVariableBorders(true);
                     pdfPCell.setBorderColorLeft(BaseColor.WHITE);
                     pdfPCell.setBorderColorRight(BaseColor.WHITE);
-                    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    if (indexC==0 || indexC==3 || indexC==4){
+                        pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    } else if (indexC==2){
+                        pdfPCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    } else {
+                        pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    }
                     pdfPCell.hasMinimumHeight();
-                    pdfPCell.setMinimumHeight(17);
-                    pdfPCell.setFixedHeight(40);
+                    pdfPCell.setMinimumHeight(14);
+                    //pdfPCell.setFixedHeight(40);
                     pdfPTable.addCell(pdfPCell);
                 }
             }

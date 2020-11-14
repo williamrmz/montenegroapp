@@ -2,6 +2,7 @@ package com.example.appnuevo.ui.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 
 import com.example.appnuevo.R;
@@ -24,6 +25,7 @@ public class LoadingDialog {
 
         dialog = builder.create();
         dialog.show();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
     }
 
     public void dismissDialog(){

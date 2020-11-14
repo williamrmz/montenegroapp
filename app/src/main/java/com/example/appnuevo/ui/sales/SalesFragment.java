@@ -101,7 +101,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
 
     }
 
-
+/*
     private ArrayList<String[]> getClients(){
         ArrayList<String[]> rows = new ArrayList<>();
         rows.add(new String[]{"1", "AEAEA", "Prueba1"});
@@ -112,6 +112,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
 
         return rows;
     }
+*/
 
     private ArrayList<String[]> getDetail(){
         ArrayList<String[]> rows = new ArrayList<>();
@@ -122,8 +123,9 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                     String.valueOf(detalleVenta.get(i).getCantidad()),
                     String.valueOf(detalleVenta.get(i).getUndm()),
                     String.valueOf(detalleVenta.get(i).getNombre_producto()),
-                    String.valueOf(detalleVenta.get(i).getPrecio_unitario()),
-                    String.valueOf(detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad())
+                    String.format("%.2f",detalleVenta.get(i).getPrecio_unitario()),
+                    String.format("%.2f", detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad()),
+                    //String.valueOf(detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad())
             });
             totalCont += detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad();
         }
@@ -139,13 +141,13 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
         tickectPDF.openDocument();
         tickectPDF.addMetaData("Montenegro", "Ventas", "William");
         tickectPDF.addTitles("DISTRIBUIDORA & COMERCIONALIZADORA","ELIZABETH S.R.L.",
-                "NICOLAS CUGLIVAN 210-074602962 - 948023073" +
+                "NICOLAS CUGLIVAN 210-074602962 - 948023073 " +
                         "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
         tickectPDF.addParagraph(shortText);
         tickectPDF.addParagraph(lognText);
         tickectPDF.createTable(header, getDetail()
         );
-        tickectPDF.addParagraph("Total a Pagar :               S/."+precioTotal);
+        tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));
         tickectPDF.addParagraph("Cajero : "+ LoginActivity.usuario.getNombre());
         tickectPDF.closeDocument();
     }
@@ -176,6 +178,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                     salesAdapter.addSales(ventaList);
                     loadingDialog.dismissDialog();
                 }else {
+                    loadingDialog.dismissDialog();
                     Log.e(TAG, "Error en la respuesta : "+response.errorBody());
                 }
             }
@@ -183,6 +186,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
             @Override
             public void onFailure(Call<VentaResponse> call, Throwable t) {
                 aptoParaCargar = true;
+                loadingDialog.dismissDialog();
                 Log.e(TAG, "Error de conexion : "+ t.getLocalizedMessage());
             }
         });

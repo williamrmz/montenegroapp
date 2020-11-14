@@ -138,11 +138,13 @@ public class ListProductsFragment extends Fragment {
                     Toast.makeText(getContext(),"Se Registró Venta " , Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    loadingDialog.dismissDialog();
                     Toast.makeText(getContext(),"No se pudo registrar ", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onFailure(Call<Request> call, Throwable t) {
+                loadingDialog.dismissDialog();
                 Toast.makeText(getContext(),"Error en conexión", Toast.LENGTH_LONG).show();
             }
         });
