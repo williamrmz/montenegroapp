@@ -8,5 +8,7 @@ public interface SaleItemClickInterface {
 
     void sendDetail(int pos);
 
+    void chargeSale(int pos);
+
 
 }

@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.appnuevo.LoginActivity;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.SalesAdapter;
 import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.interfaces.SaleItemClickInterface;
+import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.VentaResponse;
 import com.example.appnuevo.pdfs.TickectPDF;
@@ -40,14 +43,13 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     private SalesAdapter salesAdapter;
     private int page;
     private boolean aptoParaCargar;
-    //ArrayList<Venta> ventaList;
     VentaResponse ventaResponse;
     ArrayList<Venta> contList;
+    Venta venta;
     TickectPDF tickectPDF;
+    double precioTotal;
 
-    private String[] header = {"id", "nombre", "apellido"};
-    private String shortText = "Hola";
-    private String lognText = "CUERPO DEL TEXTOOOOOOOOOOO";
+
 
     public SalesFragment() {
         this.contList = new ArrayList<>();
@@ -85,30 +87,59 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                 }
             }
         });
-
-
         tickectPDF = new TickectPDF(getContext());
-        tickectPDF.openDocument();
-        tickectPDF.addMetaData("Clientes", "Ventas", "William");
-        tickectPDF.addTitles("DISTRIBUIDORA & COMERCIONALIZADORA","ELIZABETH S.R.L.",
-                                "NICOLAS CUGLIVAN 210-074602962 - 948023073" +
-                                    "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
-        tickectPDF.addParagraph(shortText);
-        tickectPDF.addParagraph(lognText);
-        tickectPDF.createTable(header, getClients());
-        tickectPDF.closeDocument();
 
         return view;
 
     }
 
+
     private ArrayList<String[]> getClients(){
         ArrayList<String[]> rows = new ArrayList<>();
-        rows.add(new String[]{"1", "Pedro", "Prueba1"});
+        rows.add(new String[]{"1", "AEAEA", "Prueba1"});
         rows.add(new String[]{"2", "Miguel", "Prueba2"});
         rows.add(new String[]{"3", "William", "Prueba3"});
+        rows.add(new String[]{"1", "AEAEA", "Prueba1"});
+        rows.add(new String[]{"1", "AEAEA", "Prueba1"});
 
         return rows;
+    }
+
+    private ArrayList<String[]> getDetail(){
+        ArrayList<String[]> rows = new ArrayList<>();
+        ArrayList<DetalleVenta> detalleVenta = venta.getDetalleVentas();
+        double totalCont=0;
+        for(int i=0; i<detalleVenta.size(); i++){
+            rows.add(new String[]{
+                    String.valueOf(detalleVenta.get(i).getCantidad()),
+                    String.valueOf(detalleVenta.get(i).getUndm()),
+                    String.valueOf(detalleVenta.get(i).getNombre_producto()),
+                    String.valueOf(detalleVenta.get(i).getPrecio_unitario()),
+                    String.valueOf(detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad())
+            });
+            totalCont += detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad();
+        }
+        precioTotal = totalCont;
+        return rows;
+    }
+
+    public void startPDF(){
+        String[] header = {"Cant", "UM", "Descripción", "Precio", "Total"};
+        String shortText = "NOTA PEDIDO N° "+venta.getIdventa();
+        String lognText = "FECHA EMISION: " +venta.getFecha_venta();
+
+        tickectPDF.openDocument();
+        tickectPDF.addMetaData("Montenegro", "Ventas", "William");
+        tickectPDF.addTitles("DISTRIBUIDORA & COMERCIONALIZADORA","ELIZABETH S.R.L.",
+                "NICOLAS CUGLIVAN 210-074602962 - 948023073" +
+                        "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
+        tickectPDF.addParagraph(shortText);
+        tickectPDF.addParagraph(lognText);
+        tickectPDF.createTable(header, getDetail()
+        );
+        tickectPDF.addParagraph("Total a Pagar :               S/."+precioTotal);
+        tickectPDF.addParagraph("Cajero : "+ LoginActivity.usuario.getNombre());
+        tickectPDF.closeDocument();
     }
 
     @Override
@@ -150,9 +181,18 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
 
     @Override
     public void sendDetail(int pos) {
-        Venta venta = contList.get(pos);
+        //se guarda una venta para enviar datos al pdf
+        venta = contList.get(pos);
+
         DetallesDialog detallesDialog = new DetallesDialog(venta.getDetalleVentas());
         detallesDialog.show(getFragmentManager(), "detalledialog");
+    }
+
+    @Override
+    public void chargeSale(int pos) {
+        venta = contList.get(pos);
+        Log.e(TAG, venta.toString());
+        this.startPDF();
     }
 
 

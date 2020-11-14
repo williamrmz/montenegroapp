@@ -18,6 +18,8 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -33,10 +35,16 @@ public class TickectPDF {
     private Document document;
     private PdfWriter pdfWriter;
     private Paragraph paragraph;
-    private Font fTitle = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
-    private Font fSubTitle = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-    private Font fText = new Font(Font.FontFamily.TIMES_ROMAN, 7, Font.BOLD);
-    private Font fHighText = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+    private PdfPTable pdfPTable;
+    private Font fTitle = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
+    private Font fSubTitle = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+    private Font fText = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
+    private Font fHighText = new Font(Font.FontFamily.HELVETICA, 8);
+
+    private Font fHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+    private Font fCell = new Font(Font.FontFamily.HELVETICA, 9);
+
+
 
     public TickectPDF(Context context) {
         this.context = context;
@@ -45,9 +53,13 @@ public class TickectPDF {
     public void openDocument() {
         createFile();
         try {
-            document = new Document(PageSize.A7);
-            //document.siz
+
+            document = new Document();
+            //document = new Document(PageSize.A7);
             pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            Rectangle one = new Rectangle(209, 600);
+            document.setPageSize(one);
+            document.setMargins(2,2,2,2);
             document.open();
         } catch (Exception e) {
             Log.e(TAG, "ERROR : " + e.getLocalizedMessage());
@@ -80,7 +92,7 @@ public class TickectPDF {
             addChildP(new Paragraph(title, fTitle));
             addChildP(new Paragraph(subTitle, fSubTitle));
             addChildP(new Paragraph(date, fHighText));
-            paragraph.setSpacingAfter(30);
+            paragraph.setSpacingAfter(5);
             document.add(paragraph);
         } catch (Exception e) {
             Log.e(TAG, "addTitles : " + e.getLocalizedMessage());
@@ -89,13 +101,14 @@ public class TickectPDF {
     }
 
     private void addChildP(Paragraph childParagraph) {
-        childParagraph.setAlignment(Element.ALIGN_BASELINE);
+        childParagraph.setAlignment(Element.ALIGN_CENTER);
         paragraph.add(childParagraph);
     }
 
     public void addParagraph(String text) {
         try {
             paragraph = new Paragraph(text, fText);
+            paragraph.setAlignment(Element.ALIGN_CENTER);
             paragraph.setSpacingAfter(5);
             paragraph.setSpacingBefore(5);
             document.add(paragraph);
@@ -107,30 +120,37 @@ public class TickectPDF {
     public void createTable(String[] header, ArrayList<String[]> clients){
         try {
             paragraph = new Paragraph();
-            paragraph.setFont(fText);
-            PdfPTable pdfPTable = new PdfPTable(header.length);
+            pdfPTable = new PdfPTable(header.length);
             pdfPTable.setWidthPercentage(100);
-            pdfPTable.setSpacingBefore(20);
+            pdfPTable.setSpacingBefore(5);
             PdfPCell pdfPCell;
             int indexC = 0;
             while (indexC < header.length) {
-                pdfPCell = new PdfPCell(new Phrase(header[indexC++], fSubTitle));
+                pdfPCell = new PdfPCell(new Phrase(header[indexC++], fHeader));
+                pdfPCell.setUseVariableBorders(true);
+                pdfPCell.setBorderColorLeft(BaseColor.WHITE);
+                pdfPCell.setBorderColorRight(BaseColor.WHITE);
                 pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                pdfPCell.setBackgroundColor(BaseColor.GREEN);
                 pdfPTable.addCell(pdfPCell);
             }
             for(int indexR=0; indexR< clients.size(); indexR++){
                 String[] row = clients.get(indexR);
-                for(indexC = 0; indexC< clients.size(); indexC++){
-                    pdfPCell = new PdfPCell(new Phrase(row[indexC]));
+                for(indexC = 0; indexC< header.length; indexC++){
+                    pdfPCell = new PdfPCell(new Phrase(row[indexC], fCell));
+                    pdfPCell.setUseVariableBorders(true);
+                    pdfPCell.setBorderColorLeft(BaseColor.WHITE);
+                    pdfPCell.setBorderColorRight(BaseColor.WHITE);
                     pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    pdfPCell.hasMinimumHeight();
+                    pdfPCell.setMinimumHeight(17);
                     pdfPCell.setFixedHeight(40);
                     pdfPTable.addCell(pdfPCell);
                 }
             }
-
             paragraph.add(pdfPTable);
             document.add(paragraph);
+
+            Log.e(TAG, "TAMAÑO ALTURA TABLA : " + pdfPTable.getTotalHeight());
 
         } catch (Exception e) {
             Log.e(TAG, "createTable : " + e.getLocalizedMessage());

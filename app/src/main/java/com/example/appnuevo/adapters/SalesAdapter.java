@@ -74,6 +74,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> 
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
                     //menu.setHeaderTitle("CRUD");
+                    saleItemClickInterface.chargeSale(getAdapterPosition());
                     menu.add(0,1,0,"PDF");
                 }
             });
