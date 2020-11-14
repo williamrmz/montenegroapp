@@ -56,6 +56,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="31dp"
+                android:backgroundTint="@color/colorPrimary"
                 android:src="@drawable/ic_accept"
                 app:maxImageSize="42dp"
                 tools:ignore="MissingConstraints" />

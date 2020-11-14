@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-       DetalleVenta detalleVenta = detalleVentasList.get(position);
+        if(position %2 == 1){
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#f5f5f0"));
+        }
 
+        DetalleVenta detalleVenta = detalleVentasList.get(position);
         if(detalleVentasList.size() >= 1){
             holder.nombre.setText(detalleVenta.getNombre_producto());
             holder.cantidad.setText("Canitdad : " + String.valueOf(detalleVenta.getCantidad()));

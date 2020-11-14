@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -34,15 +35,24 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_sales, parent, false);
+        //view.setBackgroundColor();
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if(position %2 == 1) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#f5f5f0"));
+        }
+
         Venta venta = ventasList.get(position);
         holder.idVenta.setText(String.valueOf(venta.getIdventa()));
         holder.fecha.setText(venta.getFecha_venta());
         holder.doc.setText(venta.getTipo_documento());
+
+
     }
 
     @Override
@@ -59,6 +69,8 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> 
         TextView idVenta, fecha, doc;
         public ViewHolder(View itemView) {
             super(itemView);
+
+
             idVenta = itemView.findViewById(R.id.tvIdVentaSale);
             fecha = itemView.findViewById(R.id.tvFechaVenta);
             doc = itemView.findViewById(R.id.tvTipoDoc);

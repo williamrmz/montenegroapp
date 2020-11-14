@@ -1,5 +1,7 @@
 package com.example.appnuevo.ui.select;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +25,9 @@ import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
+import com.example.appnuevo.ui.dialogs.LoadingDialog;
 import com.example.appnuevo.ui.dialogs.SearchProductDialog;
+import com.example.appnuevo.ui.sales.SalesFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -38,11 +42,14 @@ public class ListProductsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductsSelectedAdapter productsSelectedAdapter;
     private FloatingActionButton boton, accept;
+    LoadingDialog loadingDialog;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products_selected, container, false);
+
+        loadingDialog = new LoadingDialog(getActivity());
 
         recyclerView = view.findViewById(R.id.recyclerViewSelect);
         productsSelectedAdapter = new ProductsSelectedAdapter(this.getContext());
@@ -73,7 +80,31 @@ public class ListProductsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(productsSelectedAdapter.getItemCount() >=1){
-                    registerSale();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("¿Desea agregar esta venta?")
+                            .setCancelable(false)
+                            .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try {
+                                        registerSale();
+                                        finalize();
+                                        loadingDialog.startLoadingDialog();
+                                    } catch (Throwable throwable) {
+                                        throwable.printStackTrace();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
                 }else {
                     Toast.makeText(getContext(),"No se ha ingresado productos " , Toast.LENGTH_SHORT).show();
                 }
@@ -103,6 +134,7 @@ public class ListProductsFragment extends Fragment {
                     //Request request = response.body();
                     //Log.e(TAG, "REQUEST : " +  request.getRequest().toString());}
                     productsSelectedAdapter.clearList();
+                    loadingDialog.dismissDialog();
                     Toast.makeText(getContext(),"Se Registró Venta " , Toast.LENGTH_SHORT).show();
                 }
                 else {

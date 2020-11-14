@@ -14,6 +14,7 @@ import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.Usuario;
+import com.example.appnuevo.ui.dialogs.LoadingDialog;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText user, password;
     Button btnLogin;
     static public Usuario usuario;
+    LoadingDialog loadingDialog;
 
 
     @Override
@@ -35,9 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         user = findViewById(R.id.edUser);
         password = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        loadingDialog = new LoadingDialog(LoginActivity.this);
+
     }
 
     public void login(View view){
+
+        loadingDialog.startLoadingDialog();
+
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUser(user.getText().toString());
         loginRequest.setPassword(password.getText().toString());
@@ -57,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                         //Log.e(TAG, "nada : "+ coleccion.get(0).toString() );
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         Toast.makeText(LoginActivity.this,coleccion.get(0).getNombre()+" Logeado", Toast.LENGTH_LONG).show();
+                        loadingDialog.dismissDialog();
                     }else {
                         Toast.makeText(LoginActivity.this,"Datos incorrectos", Toast.LENGTH_LONG).show();
                     }

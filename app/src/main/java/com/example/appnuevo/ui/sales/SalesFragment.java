@@ -28,6 +28,7 @@ import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.VentaResponse;
 import com.example.appnuevo.pdfs.TickectPDF;
 import com.example.appnuevo.ui.dialogs.DetallesDialog;
+import com.example.appnuevo.ui.dialogs.LoadingDialog;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     Venta venta;
     TickectPDF tickectPDF;
     double precioTotal;
+    LoadingDialog loadingDialog;
 
 
 
@@ -58,6 +60,9 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sales, container, false);
+
+        loadingDialog = new LoadingDialog(this.getActivity());
+
         recyclerView = view.findViewById(R.id.recyclerViewSales);
         salesAdapter = new SalesAdapter(this.getContext(), this);
         recyclerView.setAdapter(salesAdapter);
@@ -65,6 +70,8 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
         //recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         GridLayoutManager layoutManager  = new GridLayoutManager(this.getContext(), 1);
         recyclerView.setLayoutManager(layoutManager);
+
+
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -78,9 +85,10 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
 
                     if (aptoParaCargar){
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount){
-                            Log.e(TAG, "LLEGAMOS AL FINAL : ");
+                            //Log.e(TAG, "LLEGAMOS AL FINAL : ");
                             aptoParaCargar = false;
                             page += 1;
+                            loadingDialog.startLoadingDialog();
                             listSales(page);
                         }
                     }
@@ -148,6 +156,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
         aptoParaCargar = true;
         page = 1;
         listSales(page);
+        loadingDialog.startLoadingDialog();
     }
 
 
@@ -165,6 +174,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                     //contlist para para que vaya acumulando con las entradas
                     contList.addAll(ventaResponse.getData());
                     salesAdapter.addSales(ventaList);
+                    loadingDialog.dismissDialog();
                 }else {
                     Log.e(TAG, "Error en la respuesta : "+response.errorBody());
                 }

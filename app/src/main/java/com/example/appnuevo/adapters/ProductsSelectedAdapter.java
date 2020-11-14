@@ -1,6 +1,7 @@
 package com.example.appnuevo.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +38,12 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if(position %2 == 1){
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#f5f5f0"));
+        }
+
         ProductSelect productSelect = productsSelectedList.get(position);
         holder.nombre.setText(productSelect.getNombre_producto());
         holder.categoria.setText(productSelect.getNombre_categoria());

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_select">
 
     <fragment
         android:id="@+id/nav_home"
@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_sale"
+        android:id="@+id/nav_select"
         android:name="com.example.appnuevo.ui.select.ListProductsFragment"
-        android:label="@string/menu_sale"
+        android:label="@string/menu_select"
         tools:layout="@layout/fragment_products_selected" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_notes"
         android:name="com.example.appnuevo.ui.sales.SalesFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_notes"
         tools:layout="@layout/fragment_sales" />
 </navigation>
