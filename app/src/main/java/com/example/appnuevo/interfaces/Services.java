@@ -28,7 +28,7 @@ public interface Services {
 
 
     @POST("ventas")
-    Call<Request> registerSale(@Body Venta venta);
+    Call<Venta> registerSale(@Body Venta venta);
 
     @GET("ventas")
     Call<VentaResponse> listSales(@Query("idusuario") int idusuario, @Query("page") int page);

@@ -39,6 +39,7 @@ public class TickectPDF {
     private Font fTitle = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
     private Font fSubTitle = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
     private Font fText = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
+    private Font fDate = new Font(Font.FontFamily.HELVETICA, 9);
     private Font fHighText = new Font(Font.FontFamily.HELVETICA, 8);
 
     private Font fHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -109,8 +110,19 @@ public class TickectPDF {
         try {
             paragraph = new Paragraph(text, fText);
             paragraph.setAlignment(Element.ALIGN_CENTER);
-            paragraph.setSpacingAfter(5);
+            paragraph.setSpacingAfter(8);
             paragraph.setSpacingBefore(5);
+            document.add(paragraph);
+        } catch (Exception e) {
+            Log.e(TAG, "addParagraph : " + e.getLocalizedMessage());
+        }
+    }
+
+    public void addDateParagraph(String text) {
+        try {
+            paragraph = new Paragraph(text, fDate);
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            paragraph.setSpacingAfter(10);
             document.add(paragraph);
         } catch (Exception e) {
             Log.e(TAG, "addParagraph : " + e.getLocalizedMessage());

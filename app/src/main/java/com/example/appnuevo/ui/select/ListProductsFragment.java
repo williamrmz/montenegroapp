@@ -22,14 +22,19 @@ import com.example.appnuevo.LoginActivity;
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.ProductsSelectedAdapter;
 import com.example.appnuevo.apis.ApiClient;
+import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
+import com.example.appnuevo.pdfs.TickectPDF;
 import com.example.appnuevo.ui.dialogs.LoadingDialog;
 import com.example.appnuevo.ui.dialogs.SearchProductDialog;
 import com.example.appnuevo.ui.sales.SalesFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +48,9 @@ public class ListProductsFragment extends Fragment {
     private ProductsSelectedAdapter productsSelectedAdapter;
     private FloatingActionButton boton, accept;
     LoadingDialog loadingDialog;
+    Venta venta;
+    TickectPDF tickectPDF;
+    double precioTotal;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,6 +69,8 @@ public class ListProductsFragment extends Fragment {
         accept = view.findViewById(R.id.accept);
 
         new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView);
+
+        tickectPDF = new TickectPDF(getContext());
         return view;
     }
 
@@ -79,6 +89,7 @@ public class ListProductsFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(productsSelectedAdapter.getItemCount() >=1){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("¿Desea agregar esta venta?")
@@ -108,33 +119,36 @@ public class ListProductsFragment extends Fragment {
                 }else {
                     Toast.makeText(getContext(),"No se ha ingresado productos " , Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
 
     public void registerSale(){
-        Gson gson = new Gson();
-        Venta venta = new Venta();
+        venta = new Venta();
         venta.setIdcliente(3067);
         venta.setTipo_documento("Boleta");
         venta.setNum_documento("Desdeapp");
         venta.setIdusuario(Integer.parseInt(LoginActivity.usuario.getIdusuario()));
         venta.setSerie_documento("Seriedesdeapp");
-
+        venta.setFecha_venta(String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss", new java.util.Date())));
         venta.setDetalleVentas(productsSelectedAdapter.listProducts());
+        venta.setProductSelects(productsSelectedAdapter.listProducts());
 
-        //Log.e(TAG, "VENTA "+ gson.toJson(venta));
-        //Log.e(TAG, "VENTA "+ venta);
 
-        Call<Request> call = ApiClient.getUserService().registerSale(venta);
-        call.enqueue(new Callback<Request>() {
+        Call<Venta> call = ApiClient.getUserService().registerSale(venta);
+        call.enqueue(new Callback<Venta>() {
             @Override
-            public void onResponse(Call<Request> call, Response<Request> response) {
+            public void onResponse(Call<Venta> call, Response<Venta> response) {
                 if (response.isSuccessful()){
-                    //Request request = response.body();
-                    //Log.e(TAG, "REQUEST : " +  request.getRequest().toString());}
+                    //le asigno como parametro la venta que estoy trayendo como respuesta
+                    startPDF(response.body());
+                    //se limpia la lista
                     productsSelectedAdapter.clearList();
+                    //se cierra spinner
                     loadingDialog.dismissDialog();
+                    //abre pdf
+                    tickectPDF.appViewPDF(getActivity());
                     Toast.makeText(getContext(),"Se Registró Venta " , Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -143,7 +157,7 @@ public class ListProductsFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<Request> call, Throwable t) {
+            public void onFailure(Call<Venta> call, Throwable t) {
                 loadingDialog.dismissDialog();
                 Toast.makeText(getContext(),"Error en conexión", Toast.LENGTH_LONG).show();
             }
@@ -162,6 +176,7 @@ public class ListProductsFragment extends Fragment {
         }
     }
 
+    //para eliminar ventas con deslizar
     ItemTouchHelper.SimpleCallback itemTouch = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -173,5 +188,44 @@ public class ListProductsFragment extends Fragment {
             productsSelectedAdapter.remove(viewHolder.getAdapterPosition());
         }
     };
+
+    private ArrayList<String[]> printSell(ArrayList<DetalleVenta> selects ){
+        ArrayList<String[]> rows = new ArrayList<>();
+        //ArrayList<ProductSelect> productSelects =  selects; //venta.getProductSelects();
+        double totalCont=0;
+        for(int i=0; i<selects.size(); i++){
+            rows.add(new String[]{
+                    String.valueOf(selects.get(i).getCantidad()),
+                    String.valueOf(selects.get(i).getUndm()),
+                    String.valueOf(selects.get(i).getNombre_producto()),
+                    String.format("%.2f",selects.get(i).getPventa()),
+                    String.format("%.2f", selects.get(i).getPventa() * selects.get(i).getCantidad()),
+                    //String.valueOf(detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad())
+            });
+            totalCont += selects.get(i).getPventa() * selects.get(i).getCantidad();
+
+        }
+        precioTotal = totalCont;
+        return rows;
+    }
+
+    public void startPDF(Venta sale){
+        String[] header = {"Cant", "UM", "Descripción", "Precio", "Total"};
+        String shortText = "NOTA PEDIDO N° "+sale.getIdventa();
+        String lognText = "FECHA EMISION: " +sale.getFecha_venta();
+
+        tickectPDF.openDocument();
+        tickectPDF.addMetaData("Montenegro", "Ventas", "William");
+        tickectPDF.addTitles("DISTRIBUIDORA & COMERCIONALIZADORA","ELIZABETH S.R.L.",
+                "NICOLAS CUGLIVAN 210-074602962 - 948023073 " +
+                        "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
+        tickectPDF.addParagraph(shortText);
+        tickectPDF.addDateParagraph(lognText);
+        //crear la tabla con el header y los celdas de la tabla
+        tickectPDF.createTable(header, printSell(sale.getDetalleVentas()));
+        tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));
+        tickectPDF.addParagraph("Cajero : "+ LoginActivity.usuario.getNombre());
+        tickectPDF.closeDocument();
+    }
 
 }

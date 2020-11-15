@@ -15,6 +15,7 @@ public class Venta {
     private int idusuario;
     private String serie_documento;
     private ArrayList<DetalleVenta> detalleVentas;
+    private ArrayList<ProductSelect> productSelects;
 
 
     public int getIdventa() {
@@ -82,6 +83,13 @@ public class Venta {
         this.detalleVentas = detalleVentas;
     }
 
+    public ArrayList<ProductSelect> getProductSelects() {
+        return productSelects;
+    }
+
+    public void setProductSelects(ArrayList<ProductSelect> productSelects) {
+        this.productSelects = productSelects;
+    }
 
     @Override
     public String toString() {

@@ -11,6 +11,9 @@ public class DetalleVenta {
     private double precio_compra;
     private String nombre_producto;
 
+    //para la respuesta de laravel pventa pcompra
+    private double pventa;
+
     public int getIdproducto() { return idproducto; }
 
     public void setIdproducto(int idproducto) { this.idproducto = idproducto; }
@@ -46,6 +49,14 @@ public class DetalleVenta {
 
     public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
+    }
+
+    public double getPventa() {
+        return pventa;
+    }
+
+    public void setPventa(double pventa) {
+        this.pventa = pventa;
     }
 
     @Override

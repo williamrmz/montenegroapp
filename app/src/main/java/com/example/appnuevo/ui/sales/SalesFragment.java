@@ -70,9 +70,6 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
         //recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         GridLayoutManager layoutManager  = new GridLayoutManager(this.getContext(), 1);
         recyclerView.setLayoutManager(layoutManager);
-
-
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -197,7 +194,6 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     public void sendDetail(int pos) {
         //se guarda una venta para enviar datos al pdf
         venta = contList.get(pos);
-
         DetallesDialog detallesDialog = new DetallesDialog(venta.getDetalleVentas());
         detallesDialog.show(getFragmentManager(), "detalledialog");
     }
