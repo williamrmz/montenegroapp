@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
-import com.example.appnuevo.adapters.ProductsAdapter;
-import com.example.appnuevo.adapters.ProductsSelectedAdapter;
+import com.example.appnuevo.adapters.SearchProductsAdapter;
+import com.example.appnuevo.adapters.SelectedProductsAdapter;
 import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.interfaces.RecyclerViewClickInterface;
 import com.example.appnuevo.models.Precios;
@@ -38,10 +38,10 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
     private static final String TAG = "API";
 
     private RecyclerView recyclerView;
-    private ProductsAdapter productsAdapter;
+    private SearchProductsAdapter searchProductsAdapter;
     private EditText buscador;
     ArrayList<Product> products;
-    private ProductsSelectedAdapter productsSelectedAdapter;
+    private SelectedProductsAdapter selectedProductsAdapter;
     public ProductSelect productSelect;
 
 
@@ -52,8 +52,8 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
         //Log.e(TAG, "SEARCHPRODUCTFRAGMENT CREATED");
 
         recyclerView = view.findViewById(R.id.recyclerViewSearch);
-        productsAdapter = new ProductsAdapter(this.getContext(), this);
-        recyclerView.setAdapter(productsAdapter);
+        searchProductsAdapter = new SearchProductsAdapter(this.getContext(), this);
+        recyclerView.setAdapter(searchProductsAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -68,13 +68,13 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
                     @Override
                     public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                         if(response.isSuccessful()){
-                            productsAdapter.limpiarProducts();
+                            searchProductsAdapter.limpiarProducts();
                             ProductResponse productResponse = response.body();
 
                             boolean estado = productResponse.isStatus();
                             if (estado){
                                 products = productResponse.getData();
-                                productsAdapter.adicionarListaProducts(products);
+                                searchProductsAdapter.adicionarListaProducts(products);
 
                                 /*Gson gson = new Gson();
                                 String datosPaser = gson.toJson(response.body().getData().get(0).getPrecios());
@@ -83,7 +83,7 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
                             } else {
                                 Product product = new Product();
                                 product.setNombre_producto("Sin coincidencias");
-                                productsAdapter.adicionarVacio(product);
+                                searchProductsAdapter.adicionarVacio(product);
                             }
                         } else {
                             Log.e(TAG, "NO SE PUDO CONECTAR : " + response.errorBody());
@@ -108,7 +108,7 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
 
                 if (proudcto.length() > 3){
                     this.search(proudcto);
-                }else { productsAdapter.limpiarProducts(); }
+                }else { searchProductsAdapter.limpiarProducts(); }
             }
 
             @Override
@@ -117,7 +117,7 @@ public class SearchProductDialog extends DialogFragment implements RecyclerViewC
             }
         });
 
-        productsSelectedAdapter = new ProductsSelectedAdapter(getContext());
+        selectedProductsAdapter = new SelectedProductsAdapter(getContext());
 
         return view;
     }

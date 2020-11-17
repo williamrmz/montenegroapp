@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +18,13 @@ import com.example.appnuevo.models.ProductSelect;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelectedAdapter.ViewHolder> {
+public class SelectedProductsAdapter extends RecyclerView.Adapter<SelectedProductsAdapter.ViewHolder> {
 
     private static final String TAG = "API";
     Context context;
     ArrayList<ProductSelect> productsSelectedList;
 
-    public ProductsSelectedAdapter(Context context) {
+    public SelectedProductsAdapter(Context context) {
         this.context = context;
         productsSelectedList = new ArrayList<>();
     }
@@ -33,7 +32,7 @@ public class ProductsSelectedAdapter extends RecyclerView.Adapter<ProductsSelect
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_products_selected, parent, false);
-        return new ProductsSelectedAdapter.ViewHolder(view);
+        return new SelectedProductsAdapter.ViewHolder(view);
     }
 
     @Override

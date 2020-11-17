@@ -133,7 +133,7 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     public void startPDF(){
         String[] header = {"Cant", "UM", "Descripción", "Precio", "Total"};
         String shortText = "NOTA PEDIDO N° "+venta.getIdventa();
-        String lognText = "FECHA EMISION: " +venta.getFecha_venta();
+        String lognText = "FECHA EMISION:    " +venta.getFecha_venta();
 
         tickectPDF.openDocument();
         tickectPDF.addMetaData("Montenegro", "Ventas", "William");

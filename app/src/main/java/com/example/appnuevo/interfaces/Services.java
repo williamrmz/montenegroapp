@@ -3,16 +3,14 @@ package com.example.appnuevo.interfaces;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
-import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.VentaResponse;
+import com.example.appnuevo.models.ResponseAPI;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Services {
@@ -32,4 +30,8 @@ public interface Services {
 
     @GET("ventas")
     Call<VentaResponse> listSales(@Query("idusuario") int idusuario, @Query("page") int page);
+
+    @GET("cliente")
+    Call<ResponseAPI> listClients();
+
 }

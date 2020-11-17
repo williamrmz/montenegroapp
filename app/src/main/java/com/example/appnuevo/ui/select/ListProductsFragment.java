@@ -8,33 +8,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.LoginActivity;
 import com.example.appnuevo.R;
-import com.example.appnuevo.adapters.ProductsSelectedAdapter;
+import com.example.appnuevo.adapters.SelectedProductsAdapter;
 import com.example.appnuevo.apis.ApiClient;
+import com.example.appnuevo.models.Cliente;
 import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.ProductSelect;
-import com.example.appnuevo.models.Request;
 import com.example.appnuevo.models.Venta;
+import com.example.appnuevo.models.ResponseAPI;
 import com.example.appnuevo.pdfs.TickectPDF;
 import com.example.appnuevo.ui.dialogs.LoadingDialog;
 import com.example.appnuevo.ui.dialogs.SearchProductDialog;
-import com.example.appnuevo.ui.sales.SalesFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -46,25 +47,31 @@ public class ListProductsFragment extends Fragment {
     private static final String TAG = "API";
 
     private RecyclerView recyclerView;
-    private ProductsSelectedAdapter productsSelectedAdapter;
+    private SelectedProductsAdapter selectedProductsAdapter;
     private FloatingActionButton boton, accept;
     LoadingDialog loadingDialog;
     Venta venta;
     TickectPDF tickectPDF;
     double precioTotal;
-    EditText etClient;
+    AutoCompleteTextView etClient;
+    TextView dniClient;
+    ResponseAPI responseAPI;
+    ArrayList<Cliente> clientes;
+    ArrayAdapter<Cliente> adapter;
+    Cliente cliente;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products_selected, container, false);
         etClient = view.findViewById(R.id.etClient);
+        dniClient = view.findViewById(R.id.etDni);
 
         loadingDialog = new LoadingDialog(getActivity());
 
         recyclerView = view.findViewById(R.id.recyclerViewSelect);
-        productsSelectedAdapter = new ProductsSelectedAdapter(this.getContext());
-        recyclerView.setAdapter(productsSelectedAdapter);
+        selectedProductsAdapter = new SelectedProductsAdapter(this.getContext());
+        recyclerView.setAdapter(selectedProductsAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -93,7 +100,7 @@ public class ListProductsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(productsSelectedAdapter.getItemCount() >=1){
+                if(selectedProductsAdapter.getItemCount() >=1){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("¿Desea agregar esta venta?")
                             .setCancelable(false)
@@ -125,18 +132,65 @@ public class ListProductsFragment extends Fragment {
 
             }
         });
+
+        listClients();
+
     }
 
+    //listar clientes
+    public void listClients(){
+        Call<ResponseAPI> call = ApiClient.getUserService().listClients();
+        call.enqueue(new Callback<ResponseAPI>() {
+            @Override
+            public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
+                if (response.isSuccessful()){
+                    responseAPI = response.body();
+                    clientes = responseAPI.getClientes();
+
+                    //lista al autocompletextview el modelo de clientes
+                    adapter = new ArrayAdapter<Cliente>(getActivity(), android.R.layout.simple_dropdown_item_1line, clientes);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    etClient.setAdapter(adapter);
+
+                    //Log.e(TAG, "CLIENTES: "+ etClient.getListSelection());
+
+                    etClient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            //trae del adapter seleccionado el id del cliente
+                            cliente = adapter.getItem(i);
+                            etClient.setText(cliente.getNombre().toUpperCase());
+                            dniClient.setText(cliente.getDni());
+                        }
+                    });
+
+                }
+                else {
+                    loadingDialog.dismissDialog();
+                    Toast.makeText(getContext(),"No se pudo registrar ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAPI> call, Throwable t) {
+
+            }
+        });
+    }
+
+    //registra la venta
     public void registerSale(){
         venta = new Venta();
-        venta.setIdcliente(3067);
+        venta.setIdcliente(cliente.getIdcliente());
         venta.setTipo_documento("Boleta");
         venta.setNum_documento("Desdeapp");
         venta.setIdusuario(Integer.parseInt(LoginActivity.usuario.getIdusuario()));
         venta.setSerie_documento("Seriedesdeapp");
         venta.setFecha_venta(String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss", new java.util.Date())));
-        venta.setDetalleVentas(productsSelectedAdapter.listProducts());
-        venta.setProductSelects(productsSelectedAdapter.listProducts());
+        //detalleventas con parametros enteros para usarlos en el arreglo para pdf
+        venta.setDetalleVentas(selectedProductsAdapter.listProducts());
+        //productoselects todos son string y php los acepta
+        venta.setProductSelects(selectedProductsAdapter.listProducts());
 
 
         Call<Venta> call = ApiClient.getUserService().registerSale(venta);
@@ -147,7 +201,7 @@ public class ListProductsFragment extends Fragment {
                     //le asigno como parametro la venta que estoy trayendo como respuesta
                     startPDF(response.body());
                     //se limpia la lista
-                    productsSelectedAdapter.clearList();
+                    selectedProductsAdapter.clearList();
                     //se cierra spinner
                     loadingDialog.dismissDialog();
                     //abre pdf
@@ -167,13 +221,14 @@ public class ListProductsFragment extends Fragment {
         });
     }
 
+    //permite escuchar los datos enviados en el dialog de producto seleccionado
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             String productPut = data.getStringExtra("lakey");
             Gson gson = new Gson();
             //gson ayuda a deserealizar el objeto enviado con la clase
             ProductSelect producto = gson.fromJson(productPut, ProductSelect.class);
-            productsSelectedAdapter.agregarProducto(producto);
+            selectedProductsAdapter.agregarProducto(producto);
         }else{
             Log.e(TAG, "nada : " );
         }
@@ -188,10 +243,11 @@ public class ListProductsFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            productsSelectedAdapter.remove(viewHolder.getAdapterPosition());
+            selectedProductsAdapter.remove(viewHolder.getAdapterPosition());
         }
     };
 
+    //asigna a un arreglo de string para enviar a las celdas de la tabla pdf
     private ArrayList<String[]> printSell(ArrayList<DetalleVenta> selects ){
         ArrayList<String[]> rows = new ArrayList<>();
         //ArrayList<ProductSelect> productSelects =  selects; //venta.getProductSelects();
@@ -206,16 +262,16 @@ public class ListProductsFragment extends Fragment {
                     //String.valueOf(detalleVenta.get(i).getPrecio_unitario() * detalleVenta.get(i).getCantidad())
             });
             totalCont += selects.get(i).getPventa() * selects.get(i).getCantidad();
-
         }
         precioTotal = totalCont;
         return rows;
     }
 
+    //comienza la construcción del pdf
     public void startPDF(Venta sale){
         String[] header = {"Cant", "UM", "Descripción", "Precio", "Total"};
         String shortText = "NOTA PEDIDO N° "+sale.getIdventa();
-        String lognText = "FECHA EMISION: " +sale.getFecha_venta();
+        String lognText = "FECHA EMISION:   " +sale.getFecha_venta();
 
         tickectPDF.openDocument();
         tickectPDF.addMetaData("Montenegro", "Ventas", "William");
@@ -224,13 +280,16 @@ public class ListProductsFragment extends Fragment {
                         "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
         tickectPDF.addParagraph(shortText);
         tickectPDF.addDateParagraph(lognText);
-        tickectPDF.addDateParagraph("CLIENTE:          " + etClient.getText().toString());
-        tickectPDF.addDateParagraph("DNI/RUC:            SN");
-        //crear la tabla con el header y los celdas de la tabla
+        tickectPDF.addDateParagraph("CLIENTE:    " + cliente.getNombre());
+        tickectPDF.addDateParagraph("DNI/RUC:    "+ cliente.getDni());
+        //crear la tabla con el header y los celdas de la tabla y mando el parametro el detalle
+        //ya seteado al momento de dar el método register
         tickectPDF.createTable(header, printSell(sale.getDetalleVentas()));
         tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));
         tickectPDF.addParagraph("Cajero : "+ LoginActivity.usuario.getNombre());
         tickectPDF.closeDocument();
     }
+
+
 
 }

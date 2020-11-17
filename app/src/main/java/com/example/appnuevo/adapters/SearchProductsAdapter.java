@@ -2,11 +2,9 @@ package com.example.appnuevo.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,14 +19,16 @@ import com.example.appnuevo.models.Product;
 
 import java.util.ArrayList;
 
-public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
+public class SearchProductsAdapter extends RecyclerView.Adapter<SearchProductsAdapter.ViewHolder> {
 
     private static final String TAG = "API";
     Context context;
     ArrayList<Product> productsList;
     private RecyclerViewClickInterface recyclerViewClickInterfaceProduct;
+    ArrayList<Precios> precios;
+    ArrayAdapter<Precios> adaptador;
 
-    public ProductsAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterfaceProduct) {
+    public SearchProductsAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterfaceProduct) {
         this.context = context;
         productsList = new ArrayList<>();
         this.recyclerViewClickInterfaceProduct = recyclerViewClickInterfaceProduct;
@@ -53,15 +53,21 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.nombre.setText(product.getNombre_producto());
         holder.categoria.setText(product.getNombre_categoria());
 
+        //si encuentro producto con precios carga el spinner
         if (product.getPrecios() != null){
             //reemplaza al bucle, ya que trae un arreglo de objetos el getprecios
-            ArrayList<Precios> precios = product.getPrecios();
-            ArrayAdapter<Precios> adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, precios);
+            precios = product.getPrecios();
+            adaptador = new ArrayAdapter<Precios>(context, R.layout.support_simple_spinner_dropdown_item, precios);
             adaptador.setDropDownViewResource( R.layout.support_simple_spinner_dropdown_item);
             holder.precios.setAdapter(adaptador);
+        } else {
+            //limpiar el spinner si ya se cargó algo previamente
+            if(adaptador != null){
+                adaptador.clear();
+                holder.precios.setAdapter(adaptador);
+            }
         }
     }
-
 
     @Override
     public int getItemCount() {

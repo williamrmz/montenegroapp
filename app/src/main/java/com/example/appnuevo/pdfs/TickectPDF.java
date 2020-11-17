@@ -56,11 +56,11 @@ public class TickectPDF {
         try {
 
             document = new Document();
+            document.setMargins(15,2,2,6);
             //document = new Document(PageSize.A7);
             pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             Rectangle one = new Rectangle(214, 600);
             document.setPageSize(one);
-            document.setMargins(3,2,2,2);
             document.open();
         } catch (Exception e) {
             Log.e(TAG, "ERROR : " + e.getLocalizedMessage());
@@ -102,7 +102,7 @@ public class TickectPDF {
     }
 
     private void addChildP(Paragraph childParagraph) {
-        childParagraph.setAlignment(Element.ALIGN_CENTER);
+        childParagraph.setAlignment(Element.ALIGN_LEFT);
         paragraph.add(childParagraph);
     }
 
@@ -121,7 +121,7 @@ public class TickectPDF {
     public void addDateParagraph(String text) {
         try {
             paragraph = new Paragraph(text, fDate);
-            paragraph.setAlignment(Element.ALIGN_CENTER);
+            paragraph.setAlignment(Element.ALIGN_LEFT);
             paragraph.setSpacingAfter(10);
             document.add(paragraph);
         } catch (Exception e) {

@@ -1,15 +1,10 @@
 package com.example.appnuevo.ui.dialogs;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.DetailAdapter;
-import com.example.appnuevo.adapters.ProductsAdapter;
 import com.example.appnuevo.models.DetalleVenta;
-import com.example.appnuevo.models.ProductSelect;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 

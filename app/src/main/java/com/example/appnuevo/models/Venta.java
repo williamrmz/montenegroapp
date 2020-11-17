@@ -16,6 +16,7 @@ public class Venta {
     private String serie_documento;
     private ArrayList<DetalleVenta> detalleVentas;
     private ArrayList<ProductSelect> productSelects;
+    private ArrayList<Cliente> cliente;
 
 
     public int getIdventa() {
@@ -89,6 +90,14 @@ public class Venta {
 
     public void setProductSelects(ArrayList<ProductSelect> productSelects) {
         this.productSelects = productSelects;
+    }
+
+    public ArrayList<Cliente> getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ArrayList<Cliente> cliente) {
+        this.cliente = cliente;
     }
 
     @Override
