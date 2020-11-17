@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class Request {
     //private String request;
-    private Object request;
+   /* private Object request;
     //Log.e(TAG, "nada : " );
     private String resp;
 
@@ -22,5 +22,5 @@ public class Request {
 
     public void setRequest(Object request) {
         this.request = request;
-    }
+    }*/
 }

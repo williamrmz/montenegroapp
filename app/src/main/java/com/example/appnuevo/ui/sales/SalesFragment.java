@@ -141,7 +141,8 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                 "NICOLAS CUGLIVAN 210-074602962 - 948023073 " +
                         "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
         tickectPDF.addParagraph(shortText);
-        tickectPDF.addParagraph(lognText);
+        tickectPDF.addDateParagraph(lognText);
+        //tickectPDF.addDateParagraph("CLIENTE;");
         tickectPDF.createTable(header, getDetail()
         );
         tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));

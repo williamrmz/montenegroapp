@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,11 +52,13 @@ public class ListProductsFragment extends Fragment {
     Venta venta;
     TickectPDF tickectPDF;
     double precioTotal;
+    EditText etClient;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products_selected, container, false);
+        etClient = view.findViewById(R.id.etClient);
 
         loadingDialog = new LoadingDialog(getActivity());
 
@@ -221,6 +224,8 @@ public class ListProductsFragment extends Fragment {
                         "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
         tickectPDF.addParagraph(shortText);
         tickectPDF.addDateParagraph(lognText);
+        tickectPDF.addDateParagraph("CLIENTE:          " + etClient.getText().toString());
+        tickectPDF.addDateParagraph("DNI/RUC:            SN");
         //crear la tabla con el header y los celdas de la tabla
         tickectPDF.createTable(header, printSell(sale.getDetalleVentas()));
         tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));

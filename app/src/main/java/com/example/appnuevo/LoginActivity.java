@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<LoginResponse> call, Throwable t) {
+                loadingDialog.dismissDialog();
                 Log.e(TAG, "onFailure: "+t.getLocalizedMessage());
                 Toast.makeText(LoginActivity.this,"No hay conexión", Toast.LENGTH_LONG).show();
             }

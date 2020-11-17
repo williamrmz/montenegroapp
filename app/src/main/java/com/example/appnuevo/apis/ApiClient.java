@@ -19,7 +19,7 @@ public class ApiClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 //.baseUrl("http://192.168.56.1/repo-monte/public/")
                 //.baseUrl("http://192.168.1.7/repo-monte/public/")
-                .baseUrl("http://192.168.0.52:8082/repo-monte/public/")
+                .baseUrl("http://192.168.0.76:8082/repo-monte/public/")
                 .client(okHttpClient)
                 .build();
 
