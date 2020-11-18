@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +29,10 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "API";
-    EditText user, password;
+    EditText user, password, route;
     Button btnLogin;
     static public Usuario usuario;
+    static public String IP;
     LoadingDialog loadingDialog;
     SharedPreferences sharedPref;
 
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         user = findViewById(R.id.edUser);
         password = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        route = findViewById(R.id.etRoute);
         loadingDialog = new LoadingDialog(LoginActivity.this);
 
         sharedPref = getPreferences(Context.MODE_PRIVATE);
@@ -53,10 +57,44 @@ public class LoginActivity extends AppCompatActivity {
             user.setText(usuario);
             password.setText(contra);
         }
+
+
+        String ruta = sharedPref.getString("route", null);
+        if (ruta != null) {
+            route.setText(ruta);
+
+            IP = ruta;
+        } else {
+            route.setText("Ingrese IP");
+        }
+
+
+
+        route.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("route", route.getText().toString());
+                editor.apply();
+                IP = route.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
+
 
     public void login(View view){
 
+        Log.e(TAG, "EL IP"+ IP);
         loadingDialog.startLoadingDialog();
 
         LoginRequest loginRequest = new LoginRequest();
@@ -72,21 +110,28 @@ public class LoginActivity extends AppCompatActivity {
                    LoginResponse loginResponse = response.body();
                     ArrayList<Usuario> coleccion = loginResponse.getData();
                     boolean estado = loginResponse.isStatus();
+                    boolean license = loginResponse.isLicense();
                     if (estado){
+                        if (license) {
+                            //guardando usuario final
+                            guardarPreferencias(user.getText().toString(), password.getText().toString());
+                            usuario = coleccion.get(0);
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            Toast.makeText(LoginActivity.this,coleccion.get(0).getNombre()+" Logeado", Toast.LENGTH_LONG).show();
+                            loadingDialog.dismissDialog();
+                        } else {
+                            Toast.makeText(LoginActivity.this,"La licensia a expirado", Toast.LENGTH_SHORT).show();
+                            loadingDialog.dismissDialog();
+                        }
 
-                        //guardando usuario final
-                        guardarPreferencias(user.getText().toString(), password.getText().toString());
-                        usuario = coleccion.get(0);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        Toast.makeText(LoginActivity.this,coleccion.get(0).getNombre()+" Logeado", Toast.LENGTH_LONG).show();
-                        loadingDialog.dismissDialog();
+
                     }else {
                         loadingDialog.dismissDialog();
-                        Toast.makeText(LoginActivity.this,"Datos incorrectos", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,"Datos incorrectos", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     loadingDialog.dismissDialog();
-                    Toast.makeText(LoginActivity.this,"Hubo un problema : " + response.errorBody(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,"Hubo un problema : " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }
             }
 
