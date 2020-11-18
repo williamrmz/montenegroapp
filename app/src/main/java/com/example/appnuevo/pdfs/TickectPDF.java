@@ -56,7 +56,7 @@ public class TickectPDF {
         try {
 
             document = new Document();
-            document.setMargins(15,2,2,6);
+            document.setMargins(15,2,2,8);
             //document = new Document(PageSize.A7);
             pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             Rectangle one = new Rectangle(214, 600);
@@ -102,7 +102,7 @@ public class TickectPDF {
     }
 
     private void addChildP(Paragraph childParagraph) {
-        childParagraph.setAlignment(Element.ALIGN_LEFT);
+        childParagraph.setAlignment(Element.ALIGN_CENTER);
         paragraph.add(childParagraph);
     }
 

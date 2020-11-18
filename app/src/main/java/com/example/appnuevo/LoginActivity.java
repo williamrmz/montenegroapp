@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     ArrayList<Usuario> coleccion = loginResponse.getData();
                     boolean estado = loginResponse.isStatus();
                     if (estado){
+
                         //guardando usuario final
                         guardarPreferencias(user.getText().toString(), password.getText().toString());
                         usuario = coleccion.get(0);

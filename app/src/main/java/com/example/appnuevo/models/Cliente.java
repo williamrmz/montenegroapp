@@ -2,10 +2,16 @@ package com.example.appnuevo.models;
 
 public class Cliente {
 
-    private int idcliente = 3067;
-    private String nombre = "CLIENTE";
+    private int idcliente;
+    private String nombre;
     private String apellidos;
-    private String dni = "SN";
+    private String dni;
+
+    public Cliente(int idcliente, String nombre, String dni) {
+        this.idcliente = idcliente;
+        this.nombre = nombre;
+        this.dni = dni;
+    }
 
     public int getIdcliente() {
         return idcliente;

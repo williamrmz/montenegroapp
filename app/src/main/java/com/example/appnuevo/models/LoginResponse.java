@@ -6,6 +6,7 @@ public class LoginResponse {
 
     private ArrayList<Usuario> data;
     private boolean status;
+    private String license;
 
     public boolean isStatus() {
         return status;
@@ -23,6 +24,12 @@ public class LoginResponse {
         this.data = data;
     }
 
+    public String getLicense() {
+        return license;
+    }
 
+    public void setLicense(String license) {
+        this.license = license;
+    }
 }
 

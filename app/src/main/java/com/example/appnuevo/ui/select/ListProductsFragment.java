@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,8 @@ public class ListProductsFragment extends Fragment {
     ResponseAPI responseAPI;
     ArrayList<Cliente> clientes;
     ArrayAdapter<Cliente> adapter;
-    Cliente cliente;
+    //inicializamos e
+    Cliente cliente = new Cliente(3067, "CLIENTE", "CN");
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,6 +69,10 @@ public class ListProductsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_products_selected, container, false);
         etClient = view.findViewById(R.id.etClient);
         dniClient = view.findViewById(R.id.etDni);
+
+       // Cliente client = new Cliente(3067, "CLIENTE", "CN");
+        etClient.setText(cliente.getNombre());
+        dniClient.setText(cliente.getDni());
 
         loadingDialog = new LoadingDialog(getActivity());
 
@@ -86,6 +93,10 @@ public class ListProductsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        //lista los clientes
+        listClients();
+
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +110,7 @@ public class ListProductsFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //si tenemos un producto o m+as
                 if(selectedProductsAdapter.getItemCount() >=1){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("¿Desea agregar esta venta?")
@@ -108,8 +119,10 @@ public class ListProductsFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     try {
+                                        //registra la venta
                                         registerSale();
                                         finalize();
+                                        //empieza spinner loading
                                         loadingDialog.startLoadingDialog();
                                     } catch (Throwable throwable) {
                                         throwable.printStackTrace();
@@ -122,6 +135,7 @@ public class ListProductsFragment extends Fragment {
                                     dialogInterface.cancel();
                                 }
                             });
+                    //crea el aler dialog
                     AlertDialog alert = builder.create();
                     alert.show();
 
@@ -132,8 +146,6 @@ public class ListProductsFragment extends Fragment {
 
             }
         });
-
-        listClients();
 
     }
 

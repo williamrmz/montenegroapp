@@ -23,6 +23,7 @@ import com.example.appnuevo.R;
 import com.example.appnuevo.adapters.SalesAdapter;
 import com.example.appnuevo.apis.ApiClient;
 import com.example.appnuevo.interfaces.SaleItemClickInterface;
+import com.example.appnuevo.models.Cliente;
 import com.example.appnuevo.models.DetalleVenta;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.VentaResponse;
@@ -131,6 +132,9 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
     }
 
     public void startPDF(){
+        //agregamos de la venta agregada su arreglo único de cliente
+        ArrayList<Cliente> clientes = venta.getCliente();
+
         String[] header = {"Cant", "UM", "Descripción", "Precio", "Total"};
         String shortText = "NOTA PEDIDO N° "+venta.getIdventa();
         String lognText = "FECHA EMISION:    " +venta.getFecha_venta();
@@ -142,9 +146,10 @@ public class SalesFragment extends Fragment implements SaleItemClickInterface {
                         "COMERCIALIZACIÓN DE ARROZ Y AZUCAR - ABARRATOES EN GENERAL");
         tickectPDF.addParagraph(shortText);
         tickectPDF.addDateParagraph(lognText);
-        //tickectPDF.addDateParagraph("CLIENTE;");
-        tickectPDF.createTable(header, getDetail()
-        );
+        //asignamos el cliente get 0 siendo solo un arreglo de cliente
+        tickectPDF.addDateParagraph("CLIENTE:    "+clientes.get(0).getNombre());
+        tickectPDF.addDateParagraph("DNI/RUC:    "+clientes.get(0).getDni());
+        tickectPDF.createTable(header, getDetail());
         tickectPDF.addParagraph("Total a Pagar :               S/."+ String.format("%.2f", precioTotal));
         tickectPDF.addParagraph("Cajero : "+ LoginActivity.usuario.getNombre());
         tickectPDF.closeDocument();
