@@ -1,5 +1,6 @@
 package com.example.appnuevo.interfaces;
 
+import com.example.appnuevo.models.Cliente;
 import com.example.appnuevo.models.LoginRequest;
 import com.example.appnuevo.models.LoginResponse;
 import com.example.appnuevo.models.ProductResponse;
@@ -34,4 +35,7 @@ public interface Services {
     @GET("cliente")
     Call<ResponseAPI> listClients();
 
+    //se envia de respuesta al cliente es solo 1
+    @POST("cliente")
+    Call<Cliente> addClient(@Query("nombre") String nombre, @Query("dni") String dni);
 }

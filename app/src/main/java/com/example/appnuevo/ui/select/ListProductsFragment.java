@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.example.appnuevo.models.ProductSelect;
 import com.example.appnuevo.models.Venta;
 import com.example.appnuevo.models.ResponseAPI;
 import com.example.appnuevo.pdfs.TickectPDF;
+import com.example.appnuevo.ui.dialogs.ClienteDialog;
 import com.example.appnuevo.ui.dialogs.LoadingDialog;
 import com.example.appnuevo.ui.dialogs.SearchProductDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -56,7 +58,7 @@ public class ListProductsFragment extends Fragment {
     TickectPDF tickectPDF;
     double precioTotal;
     AutoCompleteTextView etClient;
-    TextView dniClient;
+    Button btnCliente;
     ResponseAPI responseAPI;
     ArrayList<Cliente> clientes;
     ArrayAdapter<Cliente> adapter;
@@ -68,11 +70,10 @@ public class ListProductsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products_selected, container, false);
         etClient = view.findViewById(R.id.etClient);
-        dniClient = view.findViewById(R.id.etDni);
-
+        btnCliente = view.findViewById(R.id.btnCliente);
        // Cliente client = new Cliente(3067, "CLIENTE", "CN");
         etClient.setText(cliente.getNombre());
-        dniClient.setText(cliente.getDni());
+
 
         loadingDialog = new LoadingDialog(getActivity());
 
@@ -147,6 +148,41 @@ public class ListProductsFragment extends Fragment {
             }
         });
 
+        btnCliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClienteDialog dl = new ClienteDialog();
+                dl.setTargetFragment(ListProductsFragment.this, 2);
+                dl.show(getFragmentManager(), "DialogClient");
+            }
+        });
+
+    }
+
+
+    //permite escuchar los datos enviados en el dialog de producto seleccionado
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            String productPut = data.getStringExtra("lakey");
+            Gson gson = new Gson();
+            //gson ayuda a deserealizar el objeto enviado con la clase
+            ProductSelect producto = gson.fromJson(productPut, ProductSelect.class);
+            selectedProductsAdapter.agregarProducto(producto);
+        }
+
+        if (requestCode == 2) {
+            //trae datos del dialog cliente registrado
+            listClients();
+            String getidcliente = data.getStringExtra("idcliente");
+            String getnombre = data.getStringExtra("nombre");
+            etClient.setText(getnombre);
+            //cambia el id cliente del objeto instanciado al principio
+            cliente.setIdcliente(Integer.parseInt(getidcliente));
+        }
+
+        else{
+            Log.e(TAG, "nada : " );
+        }
     }
 
     //listar clientes
@@ -172,7 +208,7 @@ public class ListProductsFragment extends Fragment {
                             //trae del adapter seleccionado el id del cliente
                             cliente = adapter.getItem(i);
                             etClient.setText(cliente.getNombre().toUpperCase());
-                            dniClient.setText(cliente.getDni());
+                            //dniClient.setText(cliente.getDni());
                         }
                     });
 
@@ -233,18 +269,6 @@ public class ListProductsFragment extends Fragment {
         });
     }
 
-    //permite escuchar los datos enviados en el dialog de producto seleccionado
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            String productPut = data.getStringExtra("lakey");
-            Gson gson = new Gson();
-            //gson ayuda a deserealizar el objeto enviado con la clase
-            ProductSelect producto = gson.fromJson(productPut, ProductSelect.class);
-            selectedProductsAdapter.agregarProducto(producto);
-        }else{
-            Log.e(TAG, "nada : " );
-        }
-    }
 
     //para eliminar ventas con deslizar
     ItemTouchHelper.SimpleCallback itemTouch = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {

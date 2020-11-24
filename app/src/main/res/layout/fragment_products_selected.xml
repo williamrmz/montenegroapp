@@ -35,16 +35,16 @@
                 android:selectAllOnFocus="true"
                 android:hint="Buscar Cliente..."/>
 
-            <TextView
-                android:id="@+id/etDni"
+            <Button
+                android:id="@+id/btnCliente"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".30"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:hint="DNI"
+                android:text="cliente"
                 android:gravity="center"
-                android:textSize="18dp"/>
+                android:textSize="16dp"/>
 
         </LinearLayout>
 
